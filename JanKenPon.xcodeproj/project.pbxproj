@@ -13,7 +13,28 @@
 		3C6C7A692AF04765009A33CC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C6C7A682AF04765009A33CC /* Preview Assets.xcassets */; };
 		3C6C7A6B2AF04765009A33CC /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A6A2AF04765009A33CC /* Persistence.swift */; };
 		3C6C7A6E2AF04765009A33CC /* JanKenPon.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A6C2AF04765009A33CC /* JanKenPon.xcdatamodeld */; };
+		3C6C7A772AF07A41009A33CC /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A762AF07A41009A33CC /* Game.swift */; };
+		3C6C7A792AF07A8A009A33CC /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A782AF07A8A009A33CC /* Player.swift */; };
+		3C6C7A7B2AF07A93009A33CC /* League.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A7A2AF07A93009A33CC /* League.swift */; };
+		3C6C7A7F2AF0905F009A33CC /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A7E2AF0905F009A33CC /* PlayerView.swift */; };
+		3C6C7A812AF09271009A33CC /* LeagueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A802AF09271009A33CC /* LeagueView.swift */; };
+		3C6C7A832AF9BD89009A33CC /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A822AF9BD89009A33CC /* GameView.swift */; };
+		3C6C7A8B2AFDA9B2009A33CC /* JanKenPonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A8A2AFDA9B2009A33CC /* JanKenPonTests.swift */; };
+		3C6C7A922AFDA9D5009A33CC /* GameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A912AFDA9D4009A33CC /* GameTests.swift */; };
+		3C6C7A942AFDAA66009A33CC /* LeagueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A932AFDAA66009A33CC /* LeagueTests.swift */; };
+		3C6C7A962AFEFB0E009A33CC /* Round.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A952AFEFB0E009A33CC /* Round.swift */; };
+		3C6C7A982B043B29009A33CC /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A972B043B29009A33CC /* ShareView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3C6C7A8C2AFDA9B2009A33CC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3C6C7A562AF0475E009A33CC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3C6C7A5D2AF0475E009A33CC;
+			remoteInfo = JanKenPon;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		3C6C7A5E2AF0475E009A33CC /* JanKenPon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JanKenPon.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -25,10 +46,30 @@
 		3C6C7A6D2AF04765009A33CC /* JanKenPon.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JanKenPon.xcdatamodel; sourceTree = "<group>"; };
 		3C6C7A6F2AF04765009A33CC /* JanKenPon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JanKenPon.entitlements; sourceTree = "<group>"; };
 		3C6C7A702AF04765009A33CC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3C6C7A762AF07A41009A33CC /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		3C6C7A782AF07A8A009A33CC /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		3C6C7A7A2AF07A93009A33CC /* League.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = League.swift; sourceTree = "<group>"; };
+		3C6C7A7E2AF0905F009A33CC /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		3C6C7A802AF09271009A33CC /* LeagueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueView.swift; sourceTree = "<group>"; };
+		3C6C7A822AF9BD89009A33CC /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		3C6C7A882AFDA9B2009A33CC /* JanKenPonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JanKenPonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C6C7A8A2AFDA9B2009A33CC /* JanKenPonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JanKenPonTests.swift; sourceTree = "<group>"; };
+		3C6C7A912AFDA9D4009A33CC /* GameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTests.swift; sourceTree = "<group>"; };
+		3C6C7A932AFDAA66009A33CC /* LeagueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeagueTests.swift; sourceTree = "<group>"; };
+		3C6C7A952AFEFB0E009A33CC /* Round.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Round.swift; sourceTree = "<group>"; };
+		3C6C7A972B043B29009A33CC /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
+		3C6C7A992B083CC1009A33CC /* Notes */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		3C6C7A5B2AF0475E009A33CC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3C6C7A852AFDA9B2009A33CC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -42,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				3C6C7A602AF0475E009A33CC /* JanKenPon */,
+				3C6C7A892AFDA9B2009A33CC /* JanKenPonTests */,
 				3C6C7A5F2AF0475E009A33CC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				3C6C7A5E2AF0475E009A33CC /* JanKenPon.app */,
+				3C6C7A882AFDA9B2009A33CC /* JanKenPonTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -64,7 +107,10 @@
 				3C6C7A6F2AF04765009A33CC /* JanKenPon.entitlements */,
 				3C6C7A702AF04765009A33CC /* Info.plist */,
 				3C6C7A6C2AF04765009A33CC /* JanKenPon.xcdatamodeld */,
+				3C6C7A7D2AF09037009A33CC /* Model */,
+				3C6C7A7C2AF09028009A33CC /* View */,
 				3C6C7A672AF04765009A33CC /* Preview Content */,
+				3C6C7A992B083CC1009A33CC /* Notes */,
 			);
 			path = JanKenPon;
 			sourceTree = "<group>";
@@ -75,6 +121,38 @@
 				3C6C7A682AF04765009A33CC /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		3C6C7A7C2AF09028009A33CC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3C6C7A7E2AF0905F009A33CC /* PlayerView.swift */,
+				3C6C7A802AF09271009A33CC /* LeagueView.swift */,
+				3C6C7A822AF9BD89009A33CC /* GameView.swift */,
+				3C6C7A972B043B29009A33CC /* ShareView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3C6C7A7D2AF09037009A33CC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3C6C7A762AF07A41009A33CC /* Game.swift */,
+				3C6C7A782AF07A8A009A33CC /* Player.swift */,
+				3C6C7A7A2AF07A93009A33CC /* League.swift */,
+				3C6C7A952AFEFB0E009A33CC /* Round.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		3C6C7A892AFDA9B2009A33CC /* JanKenPonTests */ = {
+			isa = PBXGroup;
+			children = (
+				3C6C7A8A2AFDA9B2009A33CC /* JanKenPonTests.swift */,
+				3C6C7A912AFDA9D4009A33CC /* GameTests.swift */,
+				3C6C7A932AFDAA66009A33CC /* LeagueTests.swift */,
+			);
+			path = JanKenPonTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -97,6 +175,24 @@
 			productReference = 3C6C7A5E2AF0475E009A33CC /* JanKenPon.app */;
 			productType = "com.apple.product-type.application";
 		};
+		3C6C7A872AFDA9B2009A33CC /* JanKenPonTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C6C7A8E2AFDA9B2009A33CC /* Build configuration list for PBXNativeTarget "JanKenPonTests" */;
+			buildPhases = (
+				3C6C7A842AFDA9B2009A33CC /* Sources */,
+				3C6C7A852AFDA9B2009A33CC /* Frameworks */,
+				3C6C7A862AFDA9B2009A33CC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3C6C7A8D2AFDA9B2009A33CC /* PBXTargetDependency */,
+			);
+			name = JanKenPonTests;
+			productName = JanKenPonTests;
+			productReference = 3C6C7A882AFDA9B2009A33CC /* JanKenPonTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -109,6 +205,10 @@
 				TargetAttributes = {
 					3C6C7A5D2AF0475E009A33CC = {
 						CreatedOnToolsVersion = 15.0.1;
+					};
+					3C6C7A872AFDA9B2009A33CC = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = 3C6C7A5D2AF0475E009A33CC;
 					};
 				};
 			};
@@ -126,6 +226,7 @@
 			projectRoot = "";
 			targets = (
 				3C6C7A5D2AF0475E009A33CC /* JanKenPon */,
+				3C6C7A872AFDA9B2009A33CC /* JanKenPonTests */,
 			);
 		};
 /* End PBXProject section */
@@ -140,6 +241,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3C6C7A862AFDA9B2009A33CC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -147,14 +255,40 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C6C7A982B043B29009A33CC /* ShareView.swift in Sources */,
+				3C6C7A7B2AF07A93009A33CC /* League.swift in Sources */,
+				3C6C7A812AF09271009A33CC /* LeagueView.swift in Sources */,
 				3C6C7A6B2AF04765009A33CC /* Persistence.swift in Sources */,
+				3C6C7A962AFEFB0E009A33CC /* Round.swift in Sources */,
+				3C6C7A772AF07A41009A33CC /* Game.swift in Sources */,
+				3C6C7A832AF9BD89009A33CC /* GameView.swift in Sources */,
+				3C6C7A7F2AF0905F009A33CC /* PlayerView.swift in Sources */,
 				3C6C7A642AF0475E009A33CC /* ContentView.swift in Sources */,
 				3C6C7A6E2AF04765009A33CC /* JanKenPon.xcdatamodeld in Sources */,
+				3C6C7A792AF07A8A009A33CC /* Player.swift in Sources */,
 				3C6C7A622AF0475E009A33CC /* JanKenPonApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3C6C7A842AFDA9B2009A33CC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C6C7A8B2AFDA9B2009A33CC /* JanKenPonTests.swift in Sources */,
+				3C6C7A942AFDAA66009A33CC /* LeagueTests.swift in Sources */,
+				3C6C7A922AFDA9D5009A33CC /* GameTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3C6C7A8D2AFDA9B2009A33CC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3C6C7A5D2AF0475E009A33CC /* JanKenPon */;
+			targetProxy = 3C6C7A8C2AFDA9B2009A33CC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		3C6C7A712AF04765009A33CC /* Debug */ = {
@@ -338,6 +472,42 @@
 			};
 			name = Release;
 		};
+		3C6C7A8F2AFDA9B2009A33CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q24R6U6QED;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.agdogfights.JanKenPonTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JanKenPon.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/JanKenPon";
+			};
+			name = Debug;
+		};
+		3C6C7A902AFDA9B2009A33CC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q24R6U6QED;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.agdogfights.JanKenPonTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JanKenPon.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/JanKenPon";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -355,6 +525,15 @@
 			buildConfigurations = (
 				3C6C7A742AF04765009A33CC /* Debug */,
 				3C6C7A752AF04765009A33CC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3C6C7A8E2AFDA9B2009A33CC /* Build configuration list for PBXNativeTarget "JanKenPonTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C6C7A8F2AFDA9B2009A33CC /* Debug */,
+				3C6C7A902AFDA9B2009A33CC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

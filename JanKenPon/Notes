@@ -1,0 +1,281 @@
+Notes
+
+In CoreDataCloudKitShare when creating a photo, it appears first in the privateDatabase zone of
+`com.apple.coredata.cloudkit.zone`.  Then if the photo is shared it 'moves' to a zone of
+`com.apple.coredata.cloudkit.share.<uuid>`.  Each photo has it's own `*.share.<uuid>` once shared.
+
+Presumably the sharedDatabase will get populated when another's share is accepted.
+
+Apparently the zones are created automatically when a NSManagedObject/CKRecord is shared:
+    "The app doesn't specify a share intentionally, so Core Data creates a new share (zone).
+    CloudKit has a limit on how many zones a database can have, so this app provides an option for
+    users to use an existing share."
+
+
+https://developer.apple.com/documentation/coredata/nspersistentcloudkitcontainer
+    - Use
+        func fetchParticipants (matching: [CKUserIdentityLookupInfo],
+                                into: NSPersistentStore,
+                                completion: ([CKShareParticipant]?, Error?) -> Void)
+        Where `CKUserIdentity.LookupInfo` can have email+-phone-numbers
+        Apparently these 'participants' have already accepted an invite.
+
+    - Use
+        https://developer.apple.com/documentation/uikit/uicloudsharingcontroller
+        To establish sharing particpants.
+
+    - This mentions a 'custom sharing flow' for watchOS
+        https://developer.apple.com/documentation/coredata/sharing_core_data_objects_between_icloud_users
+        as well as
+
+PanKenPon is going to share a 'league' w/ all participants.  Maybe
+
+// CoreDataCloudKitShare
+
+    - App Start
+        existingShare(photo):   if let shareSet = try? persistentContainer.fetchShares(matching: [photo.objectID]),
+            One Share
+        shareTitles:            let shares = try? persistentContainer.fetchShares(in: stores)
+            Two Shares
+        <repeat above>
+        <add photo: repeat above, eventually, existingShare(photo) return `nil`
+*    <create new share>
+        presentCloudSharingController(photo):   if let shareSet = try? persistentContainer.fetchShares(matching: [photo.objectID]),
+            No 'share' -> noSharingController()
+            <shows sharing controller, specify - 'messages' w/ Naoko
+            UICloudSharingController block w/
+                self.persistentContainer.share([unsharedPhoto], to: nil) { objectIDs, share, container, error in
+                    <share created + configured>
+                    <call UICloudSharingController completion w/ share + container
+                    <calls to existingShare(photo), shareTitles
+                    <new message window, send to naoko>
+                        cloudSharingControllerDidSaveShare: persistentContainer.persistUpdatedShare(share, in: persistentStore) { ...
+                        <repeat 1>
+            <done>
+*    <add photo> - no persistentContainer
+*    <add to existing share, chose newest (created above)>
+            shareObject([object], to: existingShare)    persistentContainer.share([unsharedObject], to: existingShare) { (objectIDs, share, container, error) in
+                                                        persistentContainer.persistUpdatedShare(share, in: self.privatePersistentStore) {...
+            <done>
+*    <manage shares> - no persistentContainer
+*    <quit>          - no persistentContainer
+*    <run>           - no persistentContainer
+**   <Naoko accepts recent share>
+        No break at: windowScene(_ windowScene: UIWindowScene, userDidAcceptCloudKitShareWith
+            -> this is called when I accept an invite; not when I send an invite
+            -> store-changed notifications occur when the invitee accept; I'll see
+&    <cloud kit database>
+        Ed:     3 zones in privateDatabase, each with 2 CD_photo, CD_PhotoData, CD_Thumbnail (as expected)
+        Nao:    3 zones in sharedDatabase,  each ... (as expected)
+*    <manage participants, add - mitsi_gamble@mac.com>
+        addParticipant:     persistentContainer.fetchParticipants(matching: [lookupInfo], into ...)
+            lookupInfo: email: mitsi_...
+            body:
+                        participant.permission = permission
+                        participant.role = .privateUser
+                        share.addParticipant(participant)
+        <mitsi listed as 'pending', and in 'manage shares' as 'invited'
+            - no email received
+
+
+-- Summary
+        self.persistentContainer.share([unsharedPhoto], to: nil) {
+            - produces the 'share' thing as CKShare
+            - invoke `completion` with CKShare, ...
+                - completion uses CKShare.url in an iMessage, Mail, etc
+
+-- Implication (on JanKenPon)
+    - Create a League
+    - Share the league -> get the (ids, share, container, error)
+        - configure the share
+        - invite others
+            - fetchParticipants
+                - configure each participant (permission, role)
+                - add each participant
+                - save the share
+            - send the share.url
+
+    ? How to create the players - if invited w/ an email address.  Something has the 'name components'?
+
+    - In JanKenPon it only makes sense to have each player on their own device.
+        -> Therefore, send the invite link, those that accept are in the league
+    - In AG Scoring, some players won't, and will never, have the App.
+        - Warning 'Only players w/ and email and/or phone can be invited to use this App
+        - Add an 'Use Address Book' to add Users to the league
+        - Keep the 'player edit field' - but add an email|phone field (for hand entry)
+        - Perhaps use the 'share container (CKContainer)' to do 'user Discovery'
+            - ?? Open 'Message' or 'Mail' to send the invite URL
+                - (If an iCloud account, email might will work in Message)
+
+-- AddParticipant
+    - The participant is added to the 'share/container/store' but the user is not informed
+        - Status is 'pending'
+    - Then, send an invite (via Messages, Email);
+        - Invitee accepts, participant status changes to 'accepted'
+
+-- Public Versus Private Database
+    - The Core Data model includes 'configurations'
+    - The 'NSPersistentStoreDescription.configuration` can be assigned one of those.
+
+
+///// NO - There is no access to the CKContainer.  See above
+
+// Get CloudKit User record, see if we have a us, as a player
+
+                    // Get the userID and then the corresponding userRecord
+                    let userID = try await self.container.userRecordID ()
+                    userRecord = try await self.databasePublic.record (for: userID)
+
+                    // Get player; if there is one
+                    if let user = try await loadUser(record: userRecord) {
+                        // Move to the next state
+                        await MainActor.run {
+                            self.user  = user
+                            self.state = .establishedUser (user)
+                            refresh()
+                        }
+                    }
+
+// If not, request permission
+                var discoverable = false
+
+                // Request permission, officially
+                let status = try await container.requestApplicationPermission (
+                    CKContainer.ApplicationPermissions.userDiscoverability)
+
+                switch status {
+                case .denied:  discoverable = false
+                case .granted: discoverable = true
+                case .initialState, .couldNotComplete:
+                    fallthrough
+                @unknown default:
+                    throw AGScoringCK.ServerError.userIdentityPermissionFailed
+                }
+
+                // Save in UserDefaults and set our property
+                UserDefaults.standard.setValue (discoverable, forKey: AGScoringServer.userDiscoverableKey)
+                let discoverableFrozen = discoverable
+                await MainActor.run {
+                    self.userDiscoverable = discoverableFrozen
+                }
+
+
+// Then get userIdentity
+
+            // Get the user's identity
+            guard let identity = try await container.userIdentity (forUserRecordID: userRecord!.recordID)
+            else { /* internal error */ await refreshState(.pendingExplicitUser); return }
+
+            show (identity: identity, me: true)
+
+            // Somewhow the `identity` doesn't have a name
+            guard let _ = identity.nameComponents
+            else { await refreshState(.pendingExplicitUser); return }
+
+            // Got the identity, move to the next state
+            await refreshState (.identifiedUser (identity, nil), refresh: true)
+
+
+// and then build ther User
+
+                   // In `identity` we confirmed `nameComponents`
+                    let name = identity?.nameComponents! ?? name!
+
+                    let player = Player (familyName: name.familyName ?? "Anonymous",
+                                         givenName:  name.givenName  ?? "I'm",
+                                         scope: .user)
+
+                    let user = User (player: player)
+
+
+
+
+
+
+
+
+    var establishUserView: some View {
+        VStack {
+            switch server.state {
+            case .pendingUser:
+                Text (".pendingUser")
+            case .pendingIdentifyUser:
+                VStack {
+                    Text ("You need to allow for iCloud identity")
+                    Button ("Allow") {
+                        server.refreshTryIdentifyUser()
+                    }
+                    .padding(.bottom, 20)
+                    Button ("Refuse") {
+                        server.refreshTryIdentifyUser (allow: false)
+                    }
+                }
+            case .pendingExplicitUser:
+                Text ("Provide a name")
+                Button ("Create Names") {
+                    server.refreshProvideExplicitUser(familyName: "GambleX", givenName: "Edx")
+                }
+            case .identifiedUser(_, _):
+                EmptyView()
+//                Text (".identifyUser")
+            case .establishedUser(let user):
+                EmptyView()
+//                Text (".establishedUser: \(user.player.fullname)")
+                    .onAppear() {
+                        self.user = user
+                        self.needUser = false
+                    }
+
+
+            case let .error(error, needsRefresh):
+                VStack {
+                    switch error {
+                    case CKError.networkUnavailable,
+                        CKError.networkFailure:
+                        Text ("Network: \(error.localizedDescription)")
+                    case is CKError:
+                        Text ("CKError: \(error.localizedDescription)")
+                    case AGScoringCK.ServerError.userIdentityPermissionFailed:
+                        Text ("ServerError: \(error.localizedDescription)")
+                    default:
+                        Text ("Error: \(error.localizedDescription)")
+                    }
+
+                    if needsRefresh {
+                        Button ("Retry") {
+                            server.refreshErrorRetry()
+                        }
+                    }
+                }
+
+            case let .active (user):
+                VStack {
+                    Text (user.player.fullname)
+                        .bold()
+                        .padding (.top, 20)
+#if DEBUG
+                    Button ("Refresh") {
+                        server.refresh()
+                    }
+                    .padding(.top, 30)
+#endif
+                }
+                .onAppear() {
+                    if nil == self.user {
+                        self.user = user
+                        self.needUser = false
+                    }
+#if DEBUG
+//                    Task {
+//                        do {
+//                            needInstallButton = try await server.installForTestIsNeeded()
+//                        }
+//                        catch {
+//                            print ("Missed installForTestIsNeeded(): \(error.localizedDescription)")
+//                        }
+//                    }
+#endif
+                }
+            }   // End of `switch server.state { ... `
+        }   // End of `VStack { ...`
+    }
