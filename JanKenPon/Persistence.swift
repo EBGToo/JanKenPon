@@ -122,6 +122,14 @@ class PersistenceController: NSObject, ObservableObject {
         return storeMap.values.map(\.store).first { $0.identifier == uuid }
     }
 
+    public func scopeFor (store: NSPersistentStore) -> CKDatabase.Scope? {
+        return storeMap.values.first { $0.store == store }.map { $0.scope }
+    }
+
+    public func scopeFor (uuid: /* NSPersistentStore UUID */ String) -> CKDatabase.Scope? {
+        return storeMap.values.first { $0.store.identifier == uuid }.map { $0.scope }
+    }
+
     //
     // The Containers for this Controller
     //

@@ -27,7 +27,7 @@ struct LeagueListView: View {
             List {
                 ForEach(user.leagues.sorted(by: League.byDateSorter)) { league in
                     NavigationLink {
-                        LeagueView (league: Binding.constant(league))
+                        LeagueView (league: league)
                     } label: {
                         HStack {
                             Text(league.name)
@@ -103,7 +103,7 @@ struct LeagueView: View {
         return formatter
     }()
 
-    @Binding var league: League
+    @ObservedObject var league: League
 
     @State private var isEditing = false
 
@@ -264,7 +264,7 @@ struct LeagueView: View {
             }
         }
         .sheet (isPresented: $showCreateGame) {
-            GameCreateView (league: $league, game: $createdGame) { saved in
+            GameCreateView (league: league, game: $createdGame) { saved in
                 if let _ = createdGame {
                 }
                 showCreateGame = false

@@ -10,7 +10,7 @@ import SwiftUI
 struct GameListView: View {
     @Environment(\.managedObjectContext) private var context
 
-    @Binding var league:League
+    @ObservedObject var league:League
 
     @State private var createdGame: Game? = nil
     @State private var showCreateGame = false
@@ -19,7 +19,7 @@ struct GameListView: View {
     var body: some View {
         NavigationStack {
             Form {
-                ForEach(Array(league.games)) { game in
+                List(Array(league.games)) { game in
                     NavigationLink {
                         GameView (game: game)
                     } label: {
@@ -27,12 +27,12 @@ struct GameListView: View {
                     }
                 }
                 //                .onDelete(perform: deleteItems)
-                Section ("Hack") {
-                    Text (gamesText)
-                }
             }
             .navigationBarTitle("Games")
             .navigationBarTitleDisplayMode(.inline)
+//            .navigationDestination (for: Game.self) { game in
+//                GameView (game: game)
+//            }
             .toolbar {
                 ToolbarItem {
                     Button (action: { showCreateGame = true },
@@ -41,7 +41,7 @@ struct GameListView: View {
             }
         }
         .sheet (isPresented: $showCreateGame) {
-            GameCreateView(league: $league, game: $createdGame) { saved in
+            GameCreateView(league: league, game: $createdGame) { saved in
                 if let _ = createdGame {
                     try? context.save()
                 }
@@ -54,23 +54,31 @@ struct GameListView: View {
 
 struct GameListView_Previews: PreviewProvider {
     struct WithState : View {
-        @State private var league: League = League.create (PersistenceController.preview.context,
-                                                           name: "Preview One",
-                                                           players: Set ([
-                                                            Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")),
-                                                            Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Naoko", familyName: "Gamble")),
-                                                            Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Kai", familyName: "Gamble")),
-                                                            Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Mitsi", familyName: "Gamble"))
-                                                           ]))
+        private var players: [Player]
+        @StateObject private var league: League
+
+        init () {
+            let players = [
+                Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")),
+                Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Naoko", familyName: "Gamble")),
+                Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Kai", familyName: "Gamble")),
+                Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Mitsi", familyName: "Gamble"))
+            ]
+            self.players = players
+            self._league = StateObject (wrappedValue: League.create (PersistenceController.preview.context,
+                                                                      name: "Preview One",
+                                                                      players: Set (players)))
+        }
 
         var body: some View {
-            GameListView (league: $league)
+            GameListView (league: league)
                 .environment(\.managedObjectContext, PersistenceController.preview.context)
+                .environmentObject(players[0])
         }
     }
 
     static var previews: some View {
-        GameListView_Previews.WithState()
+        GameListView_Previews.WithState ()
     }
 }
 
@@ -78,39 +86,56 @@ struct GameListView_Previews: PreviewProvider {
 
 struct GameView: View {
     @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject private var user: Player
 
     @ObservedObject var game:Game
-    @State private var roundIsCompete = false
+    @State private var roundIsComplete = false
+    @State private var updates = 0
+
+    private func completeRound (_ round: Round) {
+        game.complete(round: round)
+        if round.isComplete { updates = 0 }
+        else { updates += 1 }
+    }
 
     var body: some View {
         NavigationStack {
             //let players = Array(game.players)
 
             Form {
+                let players = game.players.sorted(by: Player.byGivenNameSorter)
                 Section ("Rounds") {
 
                     Grid {
                         GridRow {
-                            ForEach (game.players.sorted(by: Player.byGivenNameSorter))  { player in
+                            ForEach (players)  { player in
                                 Text (player.name.givenName!)
                             }
                         }
 
                         ForEach (game.rounds, id: \.self) { round in
                             GridRow {
-                                ForEach (game.players.sorted(by: Player.byGivenNameSorter)) { player in
+                                ForEach (players) { player in
                                     let move = round.playerMove (player)!
 
                                     switch move {
                                     case Game.Move.none:
-                                        MovePicker(round: round, player: player) {
-                                            game.complete(round: round)
-                                            try? context.save()
+                                        if player == user {
+                                            MovePicker(round: round, player: player) {
+                                                completeRound (round)
+                                                try? context.save()
+                                            }
                                         }
+                                        else {
+                                            Text ("?")
+                                        }
+                                    case Game.Move.done:
+                                        Text ("")
                                     default:
-                                        Text (Game.Move.done ==  move ? "" : move.name)
+                                        Text (round.isComplete ? move.name : ".")
                                     }
                                 }
+                                .frame (height: 30)
                             }
                         }
                     }
@@ -121,22 +146,22 @@ struct GameView: View {
                 }
 
                 Section ("Players") {
-                    ForEach (game.players.sorted(by: Player.byGivenNameSorter)) { player in
+                    ForEach (players) { player in
                         Text (player.fullname)
                     }
                 }
 
                 if nil == game.winner {
                     Section ("Debug") {
-                        Text ("Number Of Rounds: \(game.numberOfRounds)")
+                        Text ("Number Of Rounds: \(game.numberOfRounds):\(updates)")
 
-                        ForEach (game.players.sorted(by: Player.byGivenNameSorter)) { player in
+                        ForEach (players) { player in
                             Button (player.name.givenName!) {
-                                if .none == game.lastRound.playerMove(player)! {
-                                    game.lastRound.setPlayerMove(player, Game.Move.randomized())
-                                    try! context.save()
-                                }
+                                game.lastRound.setPlayerMove(player, Game.Move.randomized())
+                                completeRound(game.lastRound)
+                                try! context.save()
                             }
+                            .disabled(.none != game.lastRound.playerMove(player)! || user == player)
                             .frame (maxWidth: .infinity)
                             .frame (height: 30)
                         }
@@ -154,6 +179,7 @@ struct MovePicker: View {
 
     @ObservedObject var round:Round
     @ObservedObject var player:Player
+
     var onRoundComplete: (() -> Void)? = nil
 
 
@@ -191,9 +217,9 @@ struct MovePicker: View {
 struct GameCreateView: View {
     @Environment(\.managedObjectContext) private var context
 
-    @Binding var league:League
-
+    @ObservedObject var league:League
     @Binding var game:Game?
+
     var done: ((_ saved:Bool) -> ())
 
     func canSave () -> Bool {
@@ -249,17 +275,17 @@ struct GameCreateView: View {
 struct GameCreateView_Previews: PreviewProvider {
     struct WithState : View {
         @State private var game: Game? = nil
-        @State private var league: League = League.create (PersistenceController.preview.context,
-                                                           name: "Preview One",
-                                                           players: Set ([
-                                                            Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")),
-                                                            Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Naoko", familyName: "Gamble")),
-                                                            Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Kai", familyName: "Gamble")),
-                                                            Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Mitsi", familyName: "Gamble"))
-                                                           ]))
+        @StateObject private var league: League = League.create (PersistenceController.preview.context,
+                                                                  name: "Preview One",
+                                                                  players: Set ([
+                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")),
+                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Naoko", familyName: "Gamble")),
+                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Kai", familyName: "Gamble")),
+                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Mitsi", familyName: "Gamble"))
+                                                                  ]))
 
         var body: some View {
-            GameCreateView (league: $league, game: $game) { (saved:Bool) in return }
+            GameCreateView (league: league, game: $game) { (saved:Bool) in return }
                 .environment(\.managedObjectContext, PersistenceController.preview.context)
         }
     }
