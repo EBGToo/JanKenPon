@@ -37,6 +37,8 @@ class PersistenceController: NSObject, ObservableObject {
         }
     }
 
+    static let transactionAuthor = "What the Heck is This?"  // Another App is updating the transaction history?
+
     /// A lazy, singleton, shared PersistentController
     public static var shared: PersistenceController = {
         PersistenceController(inMemory: false)
@@ -221,7 +223,7 @@ class PersistenceController: NSObject, ObservableObject {
 #else
 
         // container.viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump // NSMergeByPropertyObjectTrumpMergePolicy
-        //        container.viewContext.transactionAuthor = TransactionAuthor.app
+        container.viewContext.transactionAuthor = PersistenceController.transactionAuthor
 
         // Automatically merge the changes from other contexts.
         container.viewContext.automaticallyMergesChangesFromParent = true
@@ -283,7 +285,40 @@ class PersistenceController: NSObject, ObservableObject {
         return playerMap[participant]
     }
 
-    
+    lazy var queue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 1
+        return queue
+    }()
+
+
+    /**
+     Track the last history tokens for the stores.
+     The historyQueue reads the token when executing operations, and updates it after completing the processing.
+     Access this user default from the history queue.
+     */
+    private func historyToken(with storeUUID: String) -> NSPersistentHistoryToken? {
+        let key = "HistoryToken" + storeUUID
+        if let data = UserDefaults.standard.data(forKey: key) {
+            return  try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSPersistentHistoryToken.self, from: data)
+        }
+        return nil
+    }
+
+    private func updateHistoryToken(with storeUUID: String, newToken: NSPersistentHistoryToken) {
+        let key = "HistoryToken" + storeUUID
+        let data = try? NSKeyedArchiver.archivedData(withRootObject: newToken, requiringSecureCoding: true)
+        UserDefaults.standard.set(data, forKey: key)
+    }
+
+}
+
+extension NSPersistentCloudKitContainer {
+    func newTaskContext() -> NSManagedObjectContext {
+        let context = newBackgroundContext()
+        context.transactionAuthor = PersistenceController.transactionAuthor
+        return context
+    }
 }
 
 extension PersistenceController {
@@ -293,7 +328,7 @@ extension PersistenceController {
      */
     @objc
     func storeRemoteChange(_ notification: Notification) {
-        print ("\nJKP:\nJKP: \(#function): Got: \(notification.description)\nJKP:")
+        print ("\nJKP:\nJKP: \(#function): Got: \(notification.description)")
 
         guard let storeUUID = notification.userInfo?[NSStoreUUIDKey] as? String
         else { 
@@ -308,10 +343,106 @@ extension PersistenceController {
             return
         }
 
-        print("JKP: \(#function): Process history for \(storeUUID)\nJKP:")
+        print("JKP: \(#function): Process history for \(storeUUID)")
+
+        // Processing history
+        processHistoryAsynchronously (store: storeFor(uuid: storeUUID)!)
+
+#if false
+        queue.addOperation {
+            let context = self.container.newTaskContext()
+            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            context.performAndWait {
+
+                // self.performHistoryProcessing(storeUUID: storeUUID, performingContext: context)
+                let request = self.requestForHistory (storeUUID: storeUUID)
+
+                // Execute the request
+                let result = (try? context.execute(request)) as? NSPersistentHistoryResult
+                guard let transactions = result?.result as? [NSPersistentHistoryTransaction] else {
+                    return
+                }
+                print("JKP: \(#function): Process transactions: \(transactions.count)\nJKP:")
+
+                // Handle transaction by transaction
+                for transaction in transactions {
+                    print("JKP: \(#function): Process transaction changes: \(transaction.changes.map(\.count) ?? 0)\nJKP:")
+                    for change in transaction.changes ?? [] {
+                        print("JKP: \(#function): Process transaction changes each:: \(change)\nJKP:")
+
+                    }
+                }
+            }
+        }
+#endif
 
 //        processHistoryAsynchronously(storeUUID: storeUUID)
     }
+
+    private func processHistoryAsynchronously (store: NSPersistentStore) {
+        queue.addOperation {
+            let context = self.container.newTaskContext()
+            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+            context.performAndWait {
+
+                // self.performHistoryProcessing(storeUUID: storeUUID, performingContext: context)
+                let request = self.requestForHistory (store: store)
+
+                // Execute the request
+                let result = (try? context.execute(request)) as? NSPersistentHistoryResult
+                guard let transactions = result?.result as? [NSPersistentHistoryTransaction] else {
+                    return
+                }
+
+                if !transactions.isEmpty {
+                    print("JKP: \(#function): Process transactions: \(transactions.count)")
+                }
+
+                // Handle transaction by transaction
+                for transaction in transactions where transaction.changes != nil {
+                    print("JKP:    Process transaction changes: \(transaction.changes.map(\.count) ?? 0)")
+                    for change in transaction.changes! {
+                        print("JKP:        Process transaction changes each: \(change)")
+                        switch change.changeType {
+                        case .insert:
+                            break
+                        case .update:
+                            break
+                        case .delete:
+                            break
+                        @unknown default:
+                            <#fatalError()#>
+                        }
+                        // Find the objects that have changed
+                    }
+                }
+
+                if let token = transactions.last?.token {
+                    self.updateHistoryToken(with: store.identifier, newToken: token)
+                }
+
+                print ("JKP:\nJKP:")
+
+#if false
+                var newTagObjectIDs = [NSManagedObjectID]()
+                let tagEntityName = Tag.entity().name
+
+                for transaction in transactions where transaction.changes != nil {
+                    for change in transaction.changes! {
+                        // Somebody create a new 'tag'
+                        if change.changedObjectID.entity.name == tagEntityName && change.changeType == .insert {
+                            newTagObjectIDs.append(change.changedObjectID)
+                        }
+                    }
+                }
+                if !newTagObjectIDs.isEmpty {
+                    deduplicateAndWait(tagObjectIDs: newTagObjectIDs)
+                }
+#endif
+            }
+        }
+    }
+
 
     /**
      Handle the container's event change notifications (NSPersistentCloudKitContainer.eventChangedNotification).
@@ -354,15 +485,23 @@ extension PersistenceController {
     }
 
 
-#if false
+    func requestForHistory (store: NSPersistentStore) -> NSPersistentHistoryChangeRequest {
+        let request = NSPersistentHistoryChangeRequest.fetchHistory (after: historyToken (with: store.identifier))
+
+        // Set the `fetchRequest` to get 'out' transactions
+        let requestForTransactionHistory = NSPersistentHistoryTransaction.fetchRequest!
+        requestForTransactionHistory.predicate = NSPredicate (value: true)
+
+        //historyFetchRequest.predicate = NSPredicate(format: "author != %@", TransactionAuthor.app)
+
+        request.fetchRequest   = requestForTransactionHistory
+        request.affectedStores = [store]
+        return request
+    }
     /**
      An operation queue for handling history-processing tasks: watching changes, deduplicating tags, and triggering UI updates, if needed.
      */
-    lazy var historyQueue: OperationQueue = {
-        let queue = OperationQueue()
-        queue.maxConcurrentOperationCount = 1
-        return queue
-    }()
+#if false
 
     /**
      Process persistent history, posting any relevant transactions to the current view.
