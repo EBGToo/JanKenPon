@@ -11,7 +11,7 @@ import CoreData
 
 struct LeagueListView: View {
     @Environment(\.managedObjectContext) private var context
-    @EnvironmentObject private var user: Player
+    @EnvironmentObject private var user: User
 
 //    @FetchRequest(
 //        sortDescriptors: [NSSortDescriptor(keyPath: \League.moName, ascending: true)],
@@ -24,6 +24,7 @@ struct LeagueListView: View {
 
     var body: some View {
         NavigationStack {
+            Text ("Foo")
             List {
                 ForEach(user.leagues.sorted(by: League.byDateSorter)) { league in
                     NavigationLink {
@@ -53,9 +54,6 @@ struct LeagueListView: View {
             LeagueCreateView (league: $createdLeague) { saved in
                 if let league  = createdLeague {
                     try? context.save()
-                    league.owner = user
-                    league.addPlayer(user)
-
                     doTheShareThing (league: league) {
                         showCreateLeague = false
                     }
@@ -95,7 +93,7 @@ struct LeagueView: View {
     @Environment(\.presentationMode) var presentationMode
 
     @EnvironmentObject private var controller: PersistenceController
-    @EnvironmentObject private var user: Player
+    @EnvironmentObject private var user: User
 
     public static let dateFormatter: DateFormatter = {
         let formatter:DateFormatter = DateFormatter()
@@ -108,14 +106,14 @@ struct LeagueView: View {
     @State private var isEditing = false
 
     @State private var leagueName: String = ""
-    @State private var leaguePlayers: Set<Player> = Set()
+    @State private var leagueUsers: Set<User> = Set()
 
-    func bindingFor (player: Player) -> Binding<Bool> {
+    func bindingFor (user: User) -> Binding<Bool> {
         return Binding(
-            get: { leaguePlayers.contains(player) },
+            get: { leagueUsers.contains(user) },
             set: { (on) in
-                if on { leaguePlayers.insert(player) }
-                else  { leaguePlayers.remove(player) }
+                if on { leagueUsers.insert(user) }
+                else  { leagueUsers.remove(user) }
             })
     }
 
@@ -129,7 +127,7 @@ struct LeagueView: View {
     @FetchRequest(
         sortDescriptors: [], // [NSSortDescriptor(keyPath: \Player.fullname, ascending: true)],
         animation: .default)
-    private var players: FetchedResults<Player>
+    private var users: FetchedResults<User>
 
     @State private var showCreateGame = false
     @State private var createdGame: Game? = nil
@@ -181,14 +179,14 @@ struct LeagueView: View {
                 Section ("Players") {
                     //ScrollView {
                     if isEditing {
-                        List (players) { player in
-                            Toggle (player.fullname, isOn: bindingFor(player: player))
+                        List (users) { user in
+                            Toggle ("U: \(user.fullname)", isOn: bindingFor(user: user))
 
                         }
                     }
                     else {
-                        List (Array(leaguePlayers)) { player in
-                            Text (player.fullname)
+                        List (Array(league.players)) { player in
+                            Text ("P: \(player.fullname)")
                         }
                     }
                     //                    }
@@ -208,7 +206,7 @@ struct LeagueView: View {
                             Text ("family name:")
                                 .opacity(0.8)
                                 .font (.subheadline)
-                            TextField ("required", text: $playerFamilyName)
+                            TextField ("required", text: $userFamilyName)
                                 .multilineTextAlignment(TextAlignment.trailing)
 
                         }
@@ -216,21 +214,21 @@ struct LeagueView: View {
                             Text ("given name:")
                                 .opacity(0.8)
                                 .font (.subheadline)
-                            TextField ("required",  text: $playerGivenName)
+                            TextField ("required",  text: $userGivenName)
                                 .multilineTextAlignment(TextAlignment.trailing)
 
                         }
                         Button ("Create") {
-                            let player = Player.create (context, name: PersonNameComponents (givenName: playerGivenName,
-                                                                                             familyName: playerFamilyName))
-                            leaguePlayers.insert(player)
+                            let player = Player.create (context, name: PersonNameComponents (givenName: userGivenName,
+                                                                                             familyName: userFamilyName))
+                            leagueUsers.insert(player)
 
                             try? context.save()
-                            playerGivenName = ""
-                            playerFamilyName = ""
+                            userGivenName = ""
+                            userFamilyName = ""
                         }
                         .frame (maxWidth: .infinity)
-                        .disabled(!canCreatePlayer())
+                        .disabled(!canCreateUser())
                     }
 #endif
                     Section () {
@@ -248,7 +246,7 @@ struct LeagueView: View {
         }
         .onAppear() {
             leagueName = league.name
-            leaguePlayers = league.players
+//            leaguePlayers = league.players
         }
         .onChange(of: editMode!.wrappedValue) { (oldValue, newValue) in
             isEditing = newValue.isEditing
@@ -259,7 +257,7 @@ struct LeagueView: View {
             }
             else {
                 league.name = leagueName
-                league.players = leaguePlayers
+//                league.players = leaguePlayers
                 try? context.save()
             }
         }
@@ -341,10 +339,13 @@ struct LeagueView: View {
 #Preview {
     LeagueListView()
         .environment(\.managedObjectContext, PersistenceController.preview.context)
+        .environmentObject(User.create(PersistenceController.preview.context,
+                                       name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")))
 }
 
 struct LeagueCreateView: View  {
     @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject private var user: User
 
     @Binding var league:League?
     func canSave () -> Bool {
@@ -354,28 +355,29 @@ struct LeagueCreateView: View  {
     var done: ((_ saved:Bool) -> ())
 
     @State private var leagueName: String = ""
-    @State private var playerFamilyName: String = ""
-    @State private var playerGivenName: String = ""
 
-    func canCreatePlayer () -> Bool {
-        return !playerGivenName.isEmpty && !playerFamilyName.isEmpty
+    @State private var userFamilyName: String = ""
+    @State private var userGivenName: String = ""
+
+    func canCreateUser () -> Bool {
+        return !userGivenName.isEmpty && !userFamilyName.isEmpty
     }
 
-    @State private var leaguePlayers: Set<Player> = Set()
+    @State private var leagueUsers: Set<User> = Set()
 
-    func bindingFor (player: Player) -> Binding<Bool> {
+    func bindingFor (user: User) -> Binding<Bool> {
         return Binding(
-            get: { leaguePlayers.contains(player) },
+            get: { leagueUsers.contains(user) },
             set: { (on) in
-                if on { leaguePlayers.insert(player) }
-                else  { leaguePlayers.remove(player) }
+                if on { leagueUsers.insert(user) }
+                else  { leagueUsers.remove(user) }
             })
     }
 
     @FetchRequest(
         sortDescriptors: [], // [NSSortDescriptor(keyPath: \Player.fullname, ascending: true)],
         animation: .default)
-    private var players: FetchedResults<Player>
+    private var users: FetchedResults<User>
 
     var body: some View {
         NavigationStack {
@@ -392,19 +394,18 @@ struct LeagueCreateView: View  {
                 }
 
                 Section ("Players") {
-                    //ScrollView {
-                        List (players) { player in
-                            Toggle (player.fullname, isOn: bindingFor(player: player))
-                        }
-//                    }
+                    List (users) { user in
+                        Toggle ("U: \(user.fullname)", isOn: bindingFor(user: user))
+                    }
                 }
+
                 #if false
                 Section ("New Player") {
                     HStack {
                         Text ("family name:")
                             .opacity(0.8)
                             .font (.subheadline)
-                        TextField ("required", text: $playerFamilyName)
+                        TextField ("required", text: $userFamilyName)
                             .multilineTextAlignment(TextAlignment.trailing)
 
                     }
@@ -412,21 +413,21 @@ struct LeagueCreateView: View  {
                         Text ("given name:")
                             .opacity(0.8)
                             .font (.subheadline)
-                        TextField ("required",  text: $playerGivenName)
+                        TextField ("required",  text: $userGivenName)
                             .multilineTextAlignment(TextAlignment.trailing)
 
                     }
                     Button ("Create") {
-                        let player = Player.create (context, name: PersonNameComponents (givenName: playerGivenName,
-                                                                                         familyName: playerFamilyName))
-                        leaguePlayers.insert(player)
-
+                         let user = User.create (context, name: PersonNameComponents (givenName: userGivenName,
+                                                                                     familyName: userFamilyName))
+                        leagueUsers.insert(user)
                         try? context.save()
-                        playerGivenName = ""
-                        playerFamilyName = ""
+
+                        userGivenName = ""
+                        userFamilyName = ""
                     }
                     .frame (maxWidth: .infinity)
-                    .disabled(!canCreatePlayer())
+                    .disabled(!canCreateUser())
                 }
                 #endif
 
@@ -448,7 +449,22 @@ struct LeagueCreateView: View  {
                 }
                 ToolbarItem (placement: .navigationBarTrailing) {
                     Button ("Save") {
-                        league = League.create (context, name: leagueName, players: leaguePlayers)
+                        // Always add `user`
+                        leagueUsers.insert(user)
+
+                        // `user` is the owner
+                        let owner = user.createPlayer()
+
+                        let players = leagueUsers
+                            .filter { $0 != user}
+                            .map    { $0.createPlayer() } + [owner]
+
+                        league = League.create (context,
+                                                name: leagueName,
+                                                owner: owner,
+                                                players: Set(players))
+                        user.addLeague(league!)
+
                         done (true)
                     }
                     .disabled(!canSave())

@@ -400,6 +400,7 @@ extension PersistenceController {
 
                 // Handle transaction by transaction
                 for transaction in transactions where transaction.changes != nil {
+                    print("JKP:    Process transaction author : \(transaction.author ?? "<none>")")
                     print("JKP:    Process transaction changes: \(transaction.changes.map(\.count) ?? 0)")
                     for change in transaction.changes! {
                         print("JKP:        Process transaction changes each: \(change)")
@@ -411,7 +412,7 @@ extension PersistenceController {
                         case .delete:
                             break
                         @unknown default:
-                            <#fatalError()#>
+                            preconditionFailure("Missed `changeType` case")
                         }
                         // Find the objects that have changed
                     }

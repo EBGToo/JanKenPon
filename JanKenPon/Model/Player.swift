@@ -8,61 +8,63 @@
 import CoreData
 
 extension Player {
-//    @nonobjc public class func fetchRequest() -> NSFetchRequest<Player> {
-//        return NSFetchRequest<Player>(entityName: "Player")
-//    }
-
+    public static func lookupBy (_ context: NSManagedObjectContext, url: URL) -> Player? {
+        return context.persistentStoreCoordinator!.managedObjectID( forURIRepresentation: url)
+            .flatMap { (try? context.existingObject (with: $0)) as? Player }
+    }
 
     public static func all (_ context:NSManagedObjectContext) -> Set<Player> {
-        let players = (try? context.fetch (Player.fetchRequest())) ?? []
-        return Set(players)
+        return Set ((try? context.fetch (Player.fetchRequest())) ?? [])
     }
 
     public static func allCount (_ context:NSManagedObjectContext) -> Int {
         return (try? context.count (for: Player.fetchRequest())) ?? 0
     }
-
-    public static func lookupBy (_ context:NSManagedObjectContext, uuid: UUID) -> Player? {
-        Player.all (context)
-            .first { $0.uuid == uuid }
-    }
 }
 
 extension Player {
-    public var uuid: UUID {
-        return moUUID!
-    }
-    
     public var name:PersonNameComponents {
-        return moName! as PersonNameComponents
+        get { return moName! as PersonNameComponents }
+        set { moName = newValue as NSPersonNameComponents }
     }
 
     public var fullname:String {
         let formatter = PersonNameComponentsFormatter()
         formatter.style = .default
-        return formatter.string(from: name)
+        return formatter.string (from: name)
     }
 
-    public var leagues:Set<League> {
-        return moLeagues! as! Set<League>
+    ///
+    /// Returns this `player's` user; or nil if the user has been deleted.
+    ///
+    public var user: User? {
+        return User.lookupBy (managedObjectContext!, url: moUserID!)
     }
 
-    public var isInLeague: Bool {
-        return !leagues.isEmpty
+    public func hasUser (_ user: User) -> Bool {
+        return moUserID == user.objectID.uriRepresentation()
+    }
+
+    public var league:League {
+        return moLeague!
     }
 
     public var games: Set<Game> {
         return moGames! as! Set<Game>
     }
 
+    internal var url: URL {
+        return objectID.uriRepresentation()
+    }
+
     public static func create (_ context:NSManagedObjectContext,
-                               name: PersonNameComponents) -> Player {
+                               user: User) -> Player {
         let player = Player (context: context)
 
-        player.moUUID = UUID()
-        player.moName = name as NSPersonNameComponents
+        player.moName   = user.name as NSPersonNameComponents
+        player.moUserID = user.objectID.uriRepresentation()
 
-        player.moLeagues = NSSet()
+        player.moLeague = nil
         player.moGames  = NSSet()
 
         return player

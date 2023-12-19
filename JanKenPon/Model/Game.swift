@@ -31,21 +31,21 @@ extension Game {
         return moPlayers! as! Set<Player>
     }
 
-    public func playerBy (uuid: UUID) -> Player? {
-        return players.first { uuid == $0.uuid }
-    }
-
     public func hasPlayer (_ player: Player) -> Bool {
-        return players.contains { player.uuid == $0.uuid }
+        return players.contains (player)
     }
 
-    public var league:League? {
-        return moLeague as League?
+    internal func playerBy (url: URL) -> Player? {
+        return players.first { url == $0.objectID.uriRepresentation() }
+    }
+
+    public var league:League {
+        return moLeague! as League
     }
 
     public private(set) var winner:Player? {
-        get { return moWinner.flatMap { playerBy(uuid: $0) } }
-        set(winner) { moWinner = winner.map { $0.uuid }}
+        get { return moWinner.flatMap { Player.lookupBy(managedObjectContext!, url: $0) } }
+        set (winner) { moWinner = winner.map { $0.objectID.uriRepresentation() } }
     }
 
     public var rounds: Array<Round> {

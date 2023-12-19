@@ -45,7 +45,7 @@ struct GameListView: View {
                 if let _ = createdGame {
                     try? context.save()
                 }
-                gamesText = league.games.map { $0.league?.name ?? "<XX>"}.joined(separator: ", ")
+                gamesText = league.games.map { $0.league.name }.joined(separator: ", ")
                 showCreateGame = false
             }
         }
@@ -54,26 +54,36 @@ struct GameListView: View {
 
 struct GameListView_Previews: PreviewProvider {
     struct WithState : View {
-        private var players: [Player]
+        private static var count: Int = 1
+        private static let users = [
+            User.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")),
+            User.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Naoko", familyName: "Gamble")),
+            User.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Kai", familyName: "Gamble")),
+            User.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Mitsi", familyName: "Gamble"))
+        ]
+
+//        private var players: [Player]
         @StateObject private var league: League
+        private var owner: Player
 
         init () {
-            let players = [
-                Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")),
-                Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Naoko", familyName: "Gamble")),
-                Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Kai", familyName: "Gamble")),
-                Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Mitsi", familyName: "Gamble"))
-            ]
-            self.players = players
-            self._league = StateObject (wrappedValue: League.create (PersistenceController.preview.context,
-                                                                      name: "Preview One",
-                                                                      players: Set (players)))
+            let context = PersistenceController.preview.context
+
+            let players = GameListView_Previews.WithState.users
+                .map { Player.create(context, user: $0) }
+
+            self.owner = players[0]
+            self._league = StateObject (wrappedValue: League.create (context,
+                                                                     name: "Preview \(GameListView_Previews.WithState.count)",
+                                                                     owner: players[0],
+                                                                     players: Set (players)))
+            GameListView_Previews.WithState.count += 1
         }
 
         var body: some View {
             GameListView (league: league)
                 .environment(\.managedObjectContext, PersistenceController.preview.context)
-                .environmentObject(players[0])
+                .environmentObject(owner)
         }
     }
 
@@ -203,7 +213,7 @@ struct MovePicker: View {
                 Text (move.name).tag (move as Game.Move)
             }
         }
-        .id ("\(round.index.description):\(player.uuid)")
+        .id ("\(round.index.description):\(player.url.description)")
         .labelsHidden()
         .frame (maxWidth: .infinity)
         .onChange (of: round.isComplete) { old, new in
@@ -272,33 +282,25 @@ struct GameCreateView: View {
     }
 }
 
-struct GameCreateView_Previews: PreviewProvider {
-    struct WithState : View {
-        @State private var game: Game? = nil
-        @StateObject private var league: League = League.create (PersistenceController.preview.context,
-                                                                  name: "Preview One",
-                                                                  players: Set ([
-                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")),
-                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Naoko", familyName: "Gamble")),
-                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Kai", familyName: "Gamble")),
-                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Mitsi", familyName: "Gamble"))
-                                                                  ]))
-
-        var body: some View {
-            GameCreateView (league: league, game: $game) { (saved:Bool) in return }
-                .environment(\.managedObjectContext, PersistenceController.preview.context)
-        }
-    }
-
-    static var previews: some View {
-        GameCreateView_Previews.WithState()
-    }
-}
-
-//#Preview {
-//    @State var game:Game? = nil
+//struct GameCreateView_Previews: PreviewProvider {
+//    struct WithState : View {
+//        @State private var game: Game? = nil
+//        @StateObject private var league: League = League.create (PersistenceController.preview.context,
+//                                                                  name: "Preview One",
+//                                                                  players: Set ([
+//                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")),
+//                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Naoko", familyName: "Gamble")),
+//                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Kai", familyName: "Gamble")),
+//                                                                    Player.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Mitsi", familyName: "Gamble"))
+//                                                                  ]))
+//
+//        var body: some View {
+//            GameCreateView (league: league, game: $game) { (saved:Bool) in return }
+//                .environment(\.managedObjectContext, PersistenceController.preview.context)
+//        }
+//    }
+//
+//    static var previews: some View {
+//        GameCreateView_Previews.WithState()
+//    }
 //}
-
-
-
-

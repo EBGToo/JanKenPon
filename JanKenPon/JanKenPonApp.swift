@@ -62,7 +62,7 @@ struct JanKenPonApp: App {
     // as the app's application delegate.
     @UIApplicationDelegateAdaptor var appDelegate: JanKenPonAppDelegate
 
-    @StateObject private var userBox = PlayerBox()
+    @StateObject private var userBox = UserBox()
     //: Player = JanKenPon.establishUser (PersistenceController.shared)
 
     var body: some Scene {
@@ -74,7 +74,7 @@ struct JanKenPonApp: App {
         }
 #else
         WindowGroup {
-            if let user = userBox.player {
+            if let user = userBox.user {
                 ContentView()
                     .environmentObject (PersistenceController.shared)
                     .environmentObject (user)
@@ -87,19 +87,19 @@ struct JanKenPonApp: App {
                     Spacer()
                 }
                 .task {
-                    userBox.player = await JanKenPonApp.establishUser (PersistenceController.shared)
+                    userBox.user = await JanKenPonApp.establishUser (PersistenceController.shared)
                 }
             }
         }
 #endif
     }
 
-    static let userUUIDKey: String = PersistenceController.bundleIdentifier + ".UserUUID"
+    static let userIDKey: String = PersistenceController.bundleIdentifier + ".UserID"
 
-    static func establishUser (_ controller: PersistenceController) async -> Player? {
+    static func establishUser (_ controller: PersistenceController) async -> User? {
 
-        if let userUUID = UserDefaults.standard.string (forKey: userUUIDKey),
-           let user = Player.lookupBy(controller.context, uuid:  UUID (uuidString: userUUID)!) {
+        if let userID = UserDefaults.standard.url(forKey: userIDKey),
+           let user   = User.lookupBy (controller.context, url: userID ) {
             return user
         }
 
@@ -123,10 +123,10 @@ struct JanKenPonApp: App {
                 return nil
             }
 
-            let user = Player.create (controller.context, name: userIdentity.nameComponents!)
+            let user = User.create (controller.context, name: userIdentity.nameComponents!)
             try! controller.context.save()
 
-            UserDefaults.standard.setValue(user.uuid.uuidString, forKey: userUUIDKey)
+            UserDefaults.standard.set (user.objectID.uriRepresentation(), forKey: userIDKey)
             return user
 
             // Get player; if there is one
