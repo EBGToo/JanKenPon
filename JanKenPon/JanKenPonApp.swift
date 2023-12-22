@@ -17,7 +17,7 @@ import CoreData
 // and can then participate in games, as a player and creator.
 //
 // There would need to be other players added (in the AG Scoring App case).  Create them and then
-// share the league with them... there player name, etc gets updated.
+// share the league with them... their player name, etc gets updated.
 
 class JanKenPonSceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -94,12 +94,14 @@ struct JanKenPonApp: App {
 #endif
     }
 
-    static let userIDKey: String = PersistenceController.bundleIdentifier + ".UserID"
+    static let userUUIDKey: String = PersistenceController.bundleIdentifier + ".UserUUID"
 
     static func establishUser (_ controller: PersistenceController) async -> User? {
 
-        if let userID = UserDefaults.standard.url(forKey: userIDKey),
-           let user   = User.lookupBy (controller.context, url: userID ) {
+        if let userUUID = UserDefaults.standard
+            .string (forKey: userUUIDKey)
+            .flatMap ({ UUID(uuidString: $0) }),
+           let user      = User.lookupBy (controller.context, uuid: userUUID ) {
             return user
         }
 
@@ -124,28 +126,14 @@ struct JanKenPonApp: App {
             }
 
             let user = User.create (controller.context, name: userIdentity.nameComponents!)
-            try! controller.context.save()
+            UserDefaults.standard.set (user.uuid.uuidString, forKey: userUUIDKey)
 
-            UserDefaults.standard.set (user.objectID.uriRepresentation(), forKey: userIDKey)
             return user
-
-            // Get player; if there is one
-//            if let user = try await loadUser(record: userRecord) {
-//                // Move to the next state
-//                await MainActor.run {
-//                    self.user  = user
-//                    self.state = .establishedUser (user)
-//                    refresh()
-//                }
-//            }
         }
         catch {
             print ("\(#function) error: \(error.localizedDescription)")
             return nil
         }
-
-//        let user = Player.create(context, name: <#T##PersonNameComponents#>)
-
     }
 }
 

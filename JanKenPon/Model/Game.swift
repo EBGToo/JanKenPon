@@ -35,8 +35,8 @@ extension Game {
         return players.contains (player)
     }
 
-    internal func playerBy (url: URL) -> Player? {
-        return players.first { url == $0.objectID.uriRepresentation() }
+    internal func playerBy (uuid: UUID) -> Player? {
+        return players.first { uuid == $0.uuid }
     }
 
     public var league:League {
@@ -44,8 +44,8 @@ extension Game {
     }
 
     public private(set) var winner:Player? {
-        get { return moWinner.flatMap { Player.lookupBy(managedObjectContext!, url: $0) } }
-        set (winner) { moWinner = winner.map { $0.objectID.uriRepresentation() } }
+        get { return moWinnerUUID.flatMap { Player.lookupBy(managedObjectContext!, uuid: $0) } }
+        set (winner) { moWinnerUUID = winner.map { $0.uuid } }
     }
 
     public var rounds: Array<Round> {

@@ -14,9 +14,17 @@ extension User {
         return fetchRequest
     }
 
-    public static func lookupBy (_ context:NSManagedObjectContext, url: URL) -> User? {
-        return context.persistentStoreCoordinator!.managedObjectID(forURIRepresentation: url)
-            .flatMap { (try? context.existingObject (with: $0)) as? User }
+    @nonobjc internal class func fetchRequest (uuid: UUID) -> NSFetchRequest<User> {
+        let fetchRequest = fetchRequest()
+        fetchRequest.predicate = NSPredicate (format: "moUUID == %@", uuid as CVarArg)
+        return fetchRequest
+    }
+
+    public static func lookupBy (_ context: NSManagedObjectContext, uuid: UUID) -> User? {
+        guard let users = try? context.fetch (User.fetchRequest (uuid: uuid)), users.count > 0
+        else { return nil }
+
+        return users[0]
     }
 
     public static func all (_ context:NSManagedObjectContext) -> Set<User> {
@@ -25,6 +33,10 @@ extension User {
 }
 
 extension User {
+    internal var uuid:UUID {
+        return moUUID!
+    }
+    
     public var name:PersonNameComponents {
         get { return moName! as PersonNameComponents }
         set { 
@@ -46,9 +58,9 @@ extension User {
             return Set([])
         }
 
-        return Set (moPlayerIDs!.compactMap { url in
-            return Player.lookupBy (context, url: url) ?? {
-                debugPrint ("User.players: missed URL: \(url.debugDescription)")
+        return Set (moPlayerUUIDs!.compactMap { uuid in
+            return Player.lookupBy (context, uuid: uuid) ?? {
+                debugPrint ("User.players: missed UUID: \(uuid.debugDescription)")
                 return nil
             }()
         })
@@ -57,10 +69,32 @@ extension User {
     public func addPlayer (_ player: Player) {
         precondition (player.hasUser(self))
 
-        let url = player.objectID.uriRepresentation()
-        if !moPlayerIDs!.contains (url) {
-            moPlayerIDs!.append(url)
+        let uuid = player.uuid
+        if !moPlayerUUIDs!.contains (uuid) {
+            moPlayerUUIDs!.append(uuid)
         }
+    }
+
+    public func hasPlayer (_ player: Player) -> Bool {
+        return moPlayerUUIDs!.contains(player.uuid)
+    }
+
+    ///
+    /// Find self's player that is in `league`
+    ///
+    /// - Parameter league: the league
+    ///
+    /// - Returns: the player if found
+    ///
+    public func playerInLeague (_ league: League) -> Player? {
+        let playersInLeague = self.players.filter { league.hasPlayer($0) }
+        
+        guard playersInLeague.count <= 1
+        else {
+            preconditionFailure ("Multiple User players in league")
+        }
+        
+        return playersInLeague.first
     }
 
     public func createPlayer (_ context: NSManagedObjectContext? = nil) -> Player {
@@ -68,10 +102,9 @@ extension User {
 
         // Create a new player and then save to get the permanent objectId
         let player = Player.create (context, user: self)
-        try! context.save()
 
         // Add `player`
-        moPlayerIDs!.append (player.objectID.uriRepresentation())
+        moPlayerUUIDs!.append (player.uuid)
 
         return player
     }
@@ -83,9 +116,9 @@ extension User {
             return Set([])
         }
 
-        return Set (moLeagueIDs!.compactMap { url in
-            return League.lookupBy (context, url: url) ?? {
-                debugPrint ("User.leagues: missed URL: \(url.debugDescription)")
+        return Set (moLeagueUUIDs!.compactMap { uuid in
+            return League.lookupBy (context, uuid: uuid) ?? {
+                debugPrint ("User.leagues: missed UUID: \(uuid.debugDescription)")
                 return nil
             }()
         })
@@ -94,9 +127,9 @@ extension User {
     public func addLeague (_ league: League) {
         // Confirm, one of `user.players` is in `league.players`
 
-        let url = league.objectID.uriRepresentation()
-        if !moLeagueIDs!.contains(url) {
-            moLeagueIDs!.append (url)
+        let uuid = league.uuid
+        if !moLeagueUUIDs!.contains(uuid) {
+            moLeagueUUIDs!.append (uuid)
         }
     }
     
@@ -104,10 +137,11 @@ extension User {
                                name: PersonNameComponents) -> User {
         let user = User(context: context)
 
+        user.moUUID = UUID()
         user.moName = name as NSPersonNameComponents
 
-        user.moLeagueIDs = []
-        user.moPlayerIDs = []
+        user.moLeagueUUIDs = []
+        user.moPlayerUUIDs = []
 
         return user
     }

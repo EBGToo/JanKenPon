@@ -21,20 +21,20 @@ extension Round {
     }
 
     public func playerMove (_ player: Player) -> Game.Move? {
-        return moPlayerToMoveMap![player.objectID.uriRepresentation()].flatMap { Game.Move(rawValue: $0) }
+        return moPlayerToMoveMap![player.uuid].flatMap { Game.Move(rawValue: $0) }
     }
 
     public func setPlayerMove (_ player: Player, _ move: Game.Move) {
         precondition(game.hasPlayer(player))
 
-        moPlayerToMoveMap![player.objectID.uriRepresentation()] = move.rawValue
+        moPlayerToMoveMap![player.uuid] = move.rawValue
     }
 
     private var playerMoves: Dictionary<Player,Game.Move> {
         return moPlayerToMoveMap!.reduce(into: Dictionary<Player,Game.Move>()) { result, entry in
-            let (playerID, moveValue) = entry
+            let (playerUUID, moveValue) = entry
 
-            if let player = game.playerBy (url: playerID),
+            if let player = game.playerBy (uuid: playerUUID),
                let move   = Game.Move (rawValue: moveValue) {
                 result[player] = move
             }
@@ -53,8 +53,8 @@ extension Round {
         game.addToMoRounds(round)
 
         round.moIndex = Int16 (game.numberOfRounds)
-        round.moPlayerToMoveMap = game.players.reduce (into: Dictionary<URL, Int>()) { result, player in
-            result[player.objectID.uriRepresentation()] = Game.Move.none.rawValue
+        round.moPlayerToMoveMap = game.players.reduce (into: Dictionary<UUID, Int>()) { result, player in
+            result[player.uuid] = Game.Move.none.rawValue
         }
 
         return round

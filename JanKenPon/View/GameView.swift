@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GameListView: View {
     @Environment(\.managedObjectContext) private var context
+    @EnvironmentObject private var playerForUser: Player
 
     @ObservedObject var league:League
 
@@ -96,7 +97,7 @@ struct GameListView_Previews: PreviewProvider {
 
 struct GameView: View {
     @Environment(\.managedObjectContext) private var context
-    @EnvironmentObject private var user: Player
+    @EnvironmentObject private var playerForUser: Player
 
     @ObservedObject var game:Game
     @State private var roundIsComplete = false
@@ -130,7 +131,7 @@ struct GameView: View {
 
                                     switch move {
                                     case Game.Move.none:
-                                        if player == user {
+                                        if player == playerForUser {
                                             MovePicker(round: round, player: player) {
                                                 completeRound (round)
                                                 try? context.save()
@@ -171,7 +172,7 @@ struct GameView: View {
                                 completeRound(game.lastRound)
                                 try! context.save()
                             }
-                            .disabled(.none != game.lastRound.playerMove(player)! || user == player)
+                            .disabled(.none != game.lastRound.playerMove(player)! || playerForUser == player)
                             .frame (maxWidth: .infinity)
                             .frame (height: 30)
                         }

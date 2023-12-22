@@ -31,6 +31,20 @@ struct CloudSharingView: UIViewControllerRepresentable {
             sharingController = UICloudSharingController (share: share, container: container)
         }
         else {
+            //            let itemProvider = NSItemProvider()
+            //            itemProvider.registerC
+            //            itemProvider.registerCKShare(container: <#T##CKContainer#>, preparationHandler: <#T##() async throws -> CKShare#>)
+            //            itemProvider.registerCKShare (container: container) {
+            //                <#code#>
+            //            }
+            //            itemProvider.registerCloudKitShare(preparationHandler: { (completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
+            //                handler (object, completion)
+            //            })
+            //                                                                      }
+            //            let foo = UIActivityViewController (
+            //                activityItemsConfiguration: UIActivityItemsConfiguration (
+            //                    itemProviders: [itemProvider]))
+
             sharingController = UICloudSharingController { (_, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
                 handler (object, completion)
             }
@@ -65,29 +79,3 @@ struct CloudSharingView: UIViewControllerRepresentable {
 
     }
 }
-
-//private func shareView() -> CloudSharingView? {
-//    guard let share = activeShare, let container = activeContainer else {
-//        return nil
-//    }
-//
-//    return CloudSharingView(container: container, share: share)
-//}
-
-///// Builds a Contact row view for display contact information in a List.
-//private func contactRowView(for contact: Contact, shareable: Bool = true) -> some View {
-//    HStack {
-//        VStack(alignment: .leading) {
-//            Text(contact.name)
-//            Text(contact.phoneNumber)
-//                .textContentType(.telephoneNumber)
-//                .font(.footnote)
-//        }
-//        if shareable {
-//            Spacer()
-//            Button(action: { Task { try? await shareContact(contact) } }, label: { Image(systemName: "square.and.arrow.up") }).buttonStyle(BorderlessButtonStyle())
-//                .sheet(isPresented: $isSharing, content: { shareView() })
-//        }
-//    }
-//}
-//

@@ -8,9 +8,18 @@
 import CoreData
 
 extension League {
-    public static func lookupBy (_ context: NSManagedObjectContext, url: URL) -> League? {
-        return context.persistentStoreCoordinator!.managedObjectID (forURIRepresentation: url)
-            .flatMap { (try? context.existingObject (with: $0)) as? League }
+
+    @nonobjc internal class func fetchRequest (uuid: UUID) -> NSFetchRequest<League> {
+        let fetchRequest = fetchRequest()
+        fetchRequest.predicate = NSPredicate (format: "moUUID == %@", uuid as CVarArg)
+        return fetchRequest
+    }
+
+    public static func lookupBy (_ context: NSManagedObjectContext, uuid: UUID) -> League? {
+        guard let leagues = try? context.fetch (League.fetchRequest (uuid: uuid)), leagues.count > 0
+        else { return nil }
+
+        return leagues[0]
     }
 
     public static func all (_ context:NSManagedObjectContext) -> Set<League> {
@@ -24,7 +33,11 @@ extension League {
 }
 
 extension League {
-    @objc public var name:String {
+    internal var uuid: UUID {
+        return moUUID!
+    }
+
+    public var name:String {
         get { return moName! }
         set { moName = newValue }
     }
@@ -34,8 +47,8 @@ extension League {
     }
 
     public var owner:Player {
-        get { return Player.lookupBy (managedObjectContext!, url: moOwnerID!)! }
-        set { moOwnerID = newValue.objectID.uriRepresentation() }
+        get { return Player.lookupBy (managedObjectContext!, uuid: moOwnerUUID!)! }
+        set (owner) { moOwnerUUID = owner.uuid }
     }
 
     public var players:Set<Player> {
@@ -67,6 +80,7 @@ extension League {
                                players: Set<Player> = Set()) -> League {
         let league = League (context: context)
 
+        league.moUUID = UUID()
         league.moName = name
         league.moDate = Date.now
 

@@ -91,6 +91,8 @@ struct LeagueView: View {
     @Environment(\.managedObjectContext) private var context
     @Environment(\.editMode) private var editMode
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.colorScheme) var colorScheme
+
 
     @EnvironmentObject private var controller: PersistenceController
     @EnvironmentObject private var user: User
@@ -166,6 +168,7 @@ struct LeagueView: View {
                     List (Array(league.games)) { game in
                         NavigationLink {
                             GameView (game: game)
+                                .environmentObject(user.playerInLeague(league)!)
                         } label: {
                             Text (LeagueView.dateFormatter.string(from: game.date))
                         }
@@ -174,6 +177,7 @@ struct LeagueView: View {
 
                 Section ("Owner") {
                     Text (league.owner.fullname)
+                        .foregroundStyle (isEditing ? .gray : (colorScheme == .dark ? .white :  .black))
                 }
 
                 Section ("Players") {
@@ -181,6 +185,7 @@ struct LeagueView: View {
                     if isEditing {
                         List (users) { user in
                             Toggle ("U: \(user.fullname)", isOn: bindingFor(user: user))
+                                .disabled(self.user == user)
 
                         }
                     }
@@ -254,6 +259,9 @@ struct LeagueView: View {
         .onChange(of: isEditing) {
             if isEditing {
                 leagueName = league.name
+                leagueUsers = Set ((users.startIndex..<users.endIndex)
+                    .map { users[$0] }
+                    .compactMap { nil == $0.playerInLeague (league) ? nil : $0 })
             }
             else {
                 league.name = leagueName

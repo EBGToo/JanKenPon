@@ -8,9 +8,17 @@
 import CoreData
 
 extension Player {
-    public static func lookupBy (_ context: NSManagedObjectContext, url: URL) -> Player? {
-        return context.persistentStoreCoordinator!.managedObjectID( forURIRepresentation: url)
-            .flatMap { (try? context.existingObject (with: $0)) as? Player }
+    @nonobjc internal class func fetchRequest (uuid: UUID) -> NSFetchRequest<Player> {
+        let fetchRequest = fetchRequest()
+        fetchRequest.predicate = NSPredicate (format: "moUUID == %@", uuid as CVarArg)
+        return fetchRequest
+    }
+
+    public static func lookupBy (_ context: NSManagedObjectContext, uuid: UUID) -> Player? {
+        guard let players = try? context.fetch (Player.fetchRequest (uuid: uuid)), players.count > 0
+        else { return nil }
+
+        return players[0]
     }
 
     public static func all (_ context:NSManagedObjectContext) -> Set<Player> {
@@ -23,6 +31,10 @@ extension Player {
 }
 
 extension Player {
+    internal var uuid: UUID {
+        return moUUID!
+    }
+
     public var name:PersonNameComponents {
         get { return moName! as PersonNameComponents }
         set { moName = newValue as NSPersonNameComponents }
@@ -38,11 +50,11 @@ extension Player {
     /// Returns this `player's` user; or nil if the user has been deleted.
     ///
     public var user: User? {
-        return User.lookupBy (managedObjectContext!, url: moUserID!)
+        return User.lookupBy (managedObjectContext!, uuid: moUserUUID!)
     }
 
     public func hasUser (_ user: User) -> Bool {
-        return moUserID == user.objectID.uriRepresentation()
+        return moUserUUID! == user.uuid
     }
 
     public var league:League {
@@ -61,8 +73,9 @@ extension Player {
                                user: User) -> Player {
         let player = Player (context: context)
 
-        player.moName   = user.name as NSPersonNameComponents
-        player.moUserID = user.objectID.uriRepresentation()
+        player.moUUID     = UUID()
+        player.moName     = user.name as NSPersonNameComponents
+        player.moUserUUID = user.uuid
 
         player.moLeague = nil
         player.moGames  = NSSet()
