@@ -168,7 +168,7 @@ struct LeagueView: View {
                 }
 
                 Section ("Games") {
-                    List (Array(league.games)) { game in
+                    List (league.games.sorted(by: Game.byDataSorter)) { game in
                         NavigationLink {
                             GameView (game: game)
                                 .environmentObject(user.playerInLeague(league)!)

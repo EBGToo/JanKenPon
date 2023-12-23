@@ -250,6 +250,12 @@ extension Game {
 }
 
 extension Game {
+    public static let byDataSorter = { (g1:Game, g2:Game) -> Bool in
+        return g1.date < g2.date
+    }
+
+}
+extension Game {
     public enum Move : Int, CaseIterable {
         case none
         case rock
