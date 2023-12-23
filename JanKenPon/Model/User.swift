@@ -8,9 +8,15 @@
 import CoreData
 
 extension User {
-    @nonobjc internal class func fetchRequest (name: String) -> NSFetchRequest<User> {
+    @nonobjc internal class func fetchRequest (name: PersonNameComponents) -> NSFetchRequest<User> {
         let fetchRequest = fetchRequest()
         fetchRequest.predicate = NSPredicate (format: "moName == %@", name as CVarArg)
+        return fetchRequest
+    }
+
+    @nonobjc internal class func fetchRequest (recordID: String) -> NSFetchRequest<User> {
+        let fetchRequest = fetchRequest()
+        fetchRequest.predicate = NSPredicate (format: "moRecordID == %@", recordID as CVarArg)
         return fetchRequest
     }
 
@@ -22,6 +28,13 @@ extension User {
 
     public static func lookupBy (_ context: NSManagedObjectContext, uuid: UUID) -> User? {
         guard let users = try? context.fetch (User.fetchRequest (uuid: uuid)), users.count > 0
+        else { return nil }
+
+        return users[0]
+    }
+
+    public static func lookupBy (_ context: NSManagedObjectContext, recordID: String) -> User? {
+        guard let users = try? context.fetch (User.fetchRequest (recordID: recordID)), users.count > 0
         else { return nil }
 
         return users[0]
@@ -88,12 +101,12 @@ extension User {
     ///
     public func playerInLeague (_ league: League) -> Player? {
         let playersInLeague = self.players.filter { league.hasPlayer($0) }
-        
+
         guard playersInLeague.count <= 1
         else {
             preconditionFailure ("Multiple User players in league")
         }
-        
+
         return playersInLeague.first
     }
 
@@ -134,11 +147,13 @@ extension User {
     }
     
     public static func create (_ context: NSManagedObjectContext,
-                               name: PersonNameComponents) -> User {
+                               name: PersonNameComponents,
+                               recordID: String? = nil) -> User {
         let user = User(context: context)
 
-        user.moUUID = UUID()
-        user.moName = name as NSPersonNameComponents
+        user.moUUID     = UUID()
+        user.moRecordID = recordID
+        user.moName     = name as NSPersonNameComponents
 
         user.moLeagueUUIDs = []
         user.moPlayerUUIDs = []

@@ -58,6 +58,9 @@ struct LeagueListView: View {
                         showCreateLeague = false
                     }
                 }
+                else {
+                    showCreateLeague = false
+                }
             }
         }
     }
@@ -272,6 +275,7 @@ struct LeagueView: View {
         .sheet (isPresented: $showCreateGame) {
             GameCreateView (league: league, game: $createdGame) { saved in
                 if let _ = createdGame {
+                    try? context.save()
                 }
                 showCreateGame = false
             }

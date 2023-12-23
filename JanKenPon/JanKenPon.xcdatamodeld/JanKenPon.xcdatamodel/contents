@@ -31,6 +31,7 @@
         <attribute name="moLeagueUUIDs" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="Array&lt;UUID&gt;"/>
         <attribute name="moName" optional="YES" attributeType="Transformable" valueTransformerName="PersonNameComponentsValueTransformer" customClassName="NSPersonNameComponents"/>
         <attribute name="moPlayerUUIDs" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="Array&lt;UUID&gt;"/>
+        <attribute name="moRecordID" optional="YES" attributeType="String"/>
         <attribute name="moUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
 </model>

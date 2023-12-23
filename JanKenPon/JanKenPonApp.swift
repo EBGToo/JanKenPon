@@ -87,6 +87,8 @@ struct JanKenPonApp: App {
                     Spacer()
                 }
                 .task {
+                    // Perhas return an enum w/ 'intermediate state' so the UI can be updated w/
+                    // 'establish user', or 'retrying user' or 'awaiting User' or somethinbg
                     userBox.user = await JanKenPonApp.establishUser (PersistenceController.shared)
                 }
             }
@@ -94,40 +96,99 @@ struct JanKenPonApp: App {
 #endif
     }
 
-    static let userUUIDKey: String = PersistenceController.bundleIdentifier + ".UserUUID"
-
     static func establishUser (_ controller: PersistenceController) async -> User? {
-
-        if let userUUID = UserDefaults.standard
-            .string (forKey: userUUIDKey)
-            .flatMap ({ UUID(uuidString: $0) }),
-           let user      = User.lookupBy (controller.context, uuid: userUUID ) {
-            return user
-        }
-
-        let container = controller.cloudKitContainer
+        let userUUIDKey   = "userUUID"
+        let userContainer = controller.cloudKitContainer
+        let userDatabase  = userContainer.publicCloudDatabase
 
         do {
-            let userID       = try await container.userRecordID ()
-            let userRecord   = try await container.publicCloudDatabase.record (for: userID)
+            // Get the `userRecord` from the publicCloudDatabase
+            let userID       = try await userContainer.userRecordID ()
+            let userRecord   = try await userDatabase.record (for: userID)
 
-            let userDiscoverability = try await container.requestApplicationPermission (
-                CKContainer.ApplicationPermissions.userDiscoverability)
+            // If the `userRecord` does not have a `userUUIDKey` then we must create a new `User`.
+            // To create a `User` we'll need the `userIdentity`
+            if nil == userRecord[userUUIDKey] {
 
-            guard .granted == userDiscoverability
+                // Request `userDiscoverability`
+                let userDiscoverability = try await userContainer.requestApplicationPermission (
+                    CKContainer.ApplicationPermissions.userDiscoverability)
+
+                guard .granted == userDiscoverability
+                else {
+                    print ("\(#function) discoverability: \(userDiscoverability.rawValue)")
+                    return nil  // return EstablishUserError.discoverability
+                }
+
+                // If discoverable, get the `userIdentity`
+                guard let userIdentity = try await userContainer.userIdentity (forUserRecordID: userRecord.recordID)
+                else {
+                    return nil // return EstablishUserError.userIdentity
+                }
+
+                // Create `newUser` with the `userRecordId`.  We'll use this to lookup the
+                // Core Data User.
+                let newUser = User.create (controller.context,
+                                           name: userIdentity.nameComponents!,
+                                           recordID: userIdentity.userRecordID!.recordName)
+
+                // Save `newUser` to ensure CoreData has the object and, if needed, the object's
+                // objectID is a permanent one.
+                try controller.context.save ()
+
+                // Confirm the save
+                guard !newUser.objectID.isTemporaryID
+                else {
+                    return nil // return EstablishUserError.objectID
+                }
+
+                // Store the newUser's `uuid` back into the `userRecord`.  Then any other device
+                // starting this App will find CoreData user with this `uuid'.
+                userRecord[userUUIDKey] = newUser.uuid.uuidString
+
+                // Save the updated `userRecord`
+                let (savedUserResult, _) = try await userDatabase.modifyRecords (
+                    saving: [userRecord],
+                    deleting: [],
+                    savePolicy: CKModifyRecordsOperation.RecordSavePolicy.ifServerRecordUnchanged,
+                    atomically: true)
+
+                // Our savedUserResult will/must have a single entry; examine it for errors
+                switch savedUserResult[userRecord.recordID]! {
+                case .success(_):
+                    return newUser
+                case .failure (let error):
+                    print ("\(#function) error: \(error.localizedDescription)")
+                    return nil
+                }
+
+                // Never here
+            }
+
+            // Get the `userManagedObjectID` from the `userRecord`
+            guard let userUUID = userRecord[userUUIDKey]
+                .flatMap ({ UUID(uuidString: $0) })
             else {
-                print ("\(#function) discoverability: \(userDiscoverability.rawValue)")
                 return nil
             }
 
-            guard let userIdentity = try await container.userIdentity (forUserRecordID: userRecord.recordID)
+            // Lookup the existing user with the permanent `userManagedObjectID`.  If the
+            // publicDatabase has not been synced w/ the local CoreData, such as when a new device
+            // starts the app for the first time or an old device has been wiped, then `user` will
+            // not exist - we'd need to wait until the import is done.
+            guard let user = User.lookupBy(controller.context, uuid: userUUID)
             else {
+                // "If the context recognizes the specified object, the method returns that object.
+                //  Otherwise, the context fetches and returns a fully realized object from the
+                //  persistent store; unlike object(with:), this method never returns a fault. If
+                //  the object doesn’t exist in both the context and the persistent store, the
+                //  method throws an error."
+                //
+                // If thrown, our `try?` produces `nil` and we'll need to wait.
                 return nil
             }
 
-            let user = User.create (controller.context, name: userIdentity.nameComponents!)
-            UserDefaults.standard.set (user.uuid.uuidString, forKey: userUUIDKey)
-
+            // Return the pre-existing `user`
             return user
         }
         catch {
