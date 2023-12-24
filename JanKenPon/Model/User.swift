@@ -71,12 +71,38 @@ extension User {
             return Set([])
         }
 
-        return Set (moPlayerUUIDs!.compactMap { uuid in
-            return Player.lookupBy (context, uuid: uuid) ?? {
-                debugPrint ("User.players: missed UUID: \(uuid.debugDescription)")
-                return nil
-            }()
-        })
+        let players = moPlayerUUIDs!.compactMap { uuid in
+            Player.lookupBy (context, uuid: uuid)
+        }
+
+        if players.count != moPlayerUUIDs!.count {
+            moPlayerUUIDs!.removeAll { uuid in
+                !players.contains { uuid == $0.uuid }
+            }
+        }
+
+        return Set (players)
+
+//        // If a league is deleted, its players are summarily deleted too.  That can leave one of
+//        // our UUIDs without a reference.  Clear them out on access.
+//        let uuidToPlayerMap = moPlayerUUIDs!
+//            .reduce(into: [UUID:Player]()) { result, uuid in
+//                if let player = Player.lookupBy(context, uuid: uuid) {
+//                    result[uuid] = player
+//                }
+//            }
+//        if uuidToPlayerMap.count != moPlayerUUIDs!.count {
+//            moPlayerUUIDs!.removeAll { nil == uuidToPlayerMap[$0] }
+//        }
+//
+//        return Set (uuidToPlayerMap.values)
+
+//        return Set (moPlayerUUIDs!.compactMap { uuid in
+//            return Player.lookupBy (context, uuid: uuid) ?? {
+//                debugPrint ("User.players: missed UUID: \(uuid.debugDescription)")
+//                return nil
+//            }()
+//        })
     }
 
     public func addPlayer (_ player: Player) {
@@ -129,12 +155,36 @@ extension User {
             return Set([])
         }
 
-        return Set (moLeagueUUIDs!.compactMap { uuid in
-            return League.lookupBy (context, uuid: uuid) ?? {
-                debugPrint ("User.leagues: missed UUID: \(uuid.debugDescription)")
-                return nil
-            }()
-        })
+        let leagues = moLeagueUUIDs!.compactMap { uuid in
+            League.lookupBy (context, uuid: uuid)
+        }
+
+        if leagues.count != moLeagueUUIDs!.count {
+            moLeagueUUIDs!.removeAll { uuid in
+                !leagues.contains { $0.uuid == uuid }
+            }
+        }
+
+        return Set (leagues)
+
+//        let uuidToLeagueMap = moLeagueUUIDs!
+//            .reduce(into: [UUID:League]()) { result, uuid in
+//                if let league = League.lookupBy (context, uuid: uuid) {
+//                    result[uuid] = league
+//                }
+//            }
+//        if uuidToLeagueMap.count != moLeagueUUIDs!.count {
+//            moLeagueUUIDs!.removeAll { nil == uuidToLeagueMap[$0] }
+//        }
+//
+//        return Set (uuidToLeagueMap.values)
+        
+//        return Set (moLeagueUUIDs!.compactMap { uuid in
+//            return League.lookupBy (context, uuid: uuid) ?? {
+//                debugPrint ("User.leagues: missed UUID: \(uuid.debugDescription)")
+//                return nil
+//            }()
+//        })
     }
 
     public func addLeague (_ league: League) {
@@ -146,6 +196,12 @@ extension User {
         }
     }
     
+    public func remLeague (_ league: League) {
+        if let index = moLeagueUUIDs!.firstIndex (of: league.uuid) {
+            moLeagueUUIDs?.remove(at: index)
+        }
+    }
+
     public static func create (_ context: NSManagedObjectContext,
                                name: PersonNameComponents,
                                recordID: String? = nil) -> User {

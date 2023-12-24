@@ -11,6 +11,8 @@ import CoreData
 
 struct LeagueListView: View {
     @Environment(\.managedObjectContext) private var context
+
+    @EnvironmentObject private var controller: PersistenceController
     @EnvironmentObject private var user: User
 
 //    @FetchRequest(
@@ -24,7 +26,6 @@ struct LeagueListView: View {
 
     var body: some View {
         NavigationStack {
-            Text ("Foo")
             List {
                 ForEach(user.leagues.sorted(by: League.byDateSorter)) { league in
                     NavigationLink {
@@ -33,7 +34,7 @@ struct LeagueListView: View {
                         HStack {
                             Text(league.name)
                             Spacer()
-                            Text ("(\(league.owner.fullname))")
+                            Text ("(O: \(league.owner.fullname))")
                                 .font (.footnote)
                         }
                     }
@@ -68,16 +69,15 @@ struct LeagueListView: View {
     private func doTheShareThing (league: League, done: @escaping () -> Void) {
         Task {
             do {
-                let (ids, share, container) = try await PersistenceController.shared.container.share([league], to: nil)
+                let (_, share, _) = try await controller.container.share([league], to: nil)
 
                 // Configure the share
                 share[CKShare.SystemFieldKey.title] = league.name
 
-//                // Share has participant + owner
-//                let owner = share.owner
-//                // ?? Create a different player for each League ??
-//                let ownerAsPlayer = Player.create(context, name: owner.userIdentity.nameComponents!)
+                // Record the association
+                controller.associate(league: league, share: share)
 
+                // Extract `userIdentity` from share owner+participants
             }
             catch {
                 print ("JKP: Error: \(error.localizedDescription)")
@@ -95,6 +95,7 @@ struct LeagueView: View {
     @Environment(\.editMode) private var editMode
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) var dismiss
 
 
     @EnvironmentObject private var controller: PersistenceController
@@ -139,114 +140,133 @@ struct LeagueView: View {
 
     @State private var showInvitePlayers = false
 
+    @State private var leagueIsDeleted = false
+
     var body: some View {
         NavigationStack {
             Form {
-                Section ("Configuration") {
-                    HStack {
-                        Text ("name:")
-                            .opacity(0.8)
-                            .font (.subheadline)
-                        if isEditing  { // } editMode?.isEditing {
-                            TextField ("required", text: $leagueName)
-                                .multilineTextAlignment(TextAlignment.trailing)
+                if leagueIsDeleted {
+                    EmptyView()
+                }
+                else {
+                    Section ("Configuration") {
+                        HStack {
+                            Text ("name:")
+                                .opacity(0.8)
+                                .font (.subheadline)
+                            if isEditing  { // } editMode?.isEditing {
+                                TextField ("required", text: $leagueName)
+                                    .multilineTextAlignment(TextAlignment.trailing)
+                            }
+                            else {
+                                Text (leagueName)
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
+                            }
+                        }
+                    }
+
+                    if !isEditing {
+                        Section () {
+                            Button ("Create Game") {
+                                showCreateGame = true
+                            }
+                            .frame (maxWidth: .infinity)
+                        }
+                    }
+
+                    Section ("Games") {
+                        List (league.games.sorted(by: Game.byDataSorter)) { game in
+                            NavigationLink {
+                                GameView (game: game)
+                                    .environmentObject(user.playerInLeague(league)!)
+                            } label: {
+                                Text (LeagueView.dateFormatter.string(from: game.date))
+                            }
+                        }
+                    }
+
+                    Section ("Owner") {
+                        Text ("P: \(league.owner.fullname)")
+                            .foregroundStyle (isEditing ? .gray : (colorScheme == .dark ? .white :  .black))
+                    }
+
+                    Section ("Players") {
+                        //ScrollView {
+                        if isEditing {
+                            List (users) { user in
+                                Toggle ("U: \(user.fullname)", isOn: bindingFor(user: user))
+                                    .disabled(self.user == user)
+
+                            }
                         }
                         else {
-                            Text (leagueName)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
+                            List (Array(league.players)) { player in
+                                Text ("P: \(player.fullname)")
+                            }
                         }
+                        //                    }
                     }
-                }
 
-                if !isEditing {
                     Section () {
-                        Button ("Create Game") {
-                            showCreateGame = true
+                        Button ("Invite Players") {
+                            showInvitePlayers = true
                         }
                         .frame (maxWidth: .infinity)
+
                     }
-                }
-
-                Section ("Games") {
-                    List (league.games.sorted(by: Game.byDataSorter)) { game in
-                        NavigationLink {
-                            GameView (game: game)
-                                .environmentObject(user.playerInLeague(league)!)
-                        } label: {
-                            Text (LeagueView.dateFormatter.string(from: game.date))
-                        }
-                    }
-                }
-
-                Section ("Owner") {
-                    Text (league.owner.fullname)
-                        .foregroundStyle (isEditing ? .gray : (colorScheme == .dark ? .white :  .black))
-                }
-
-                Section ("Players") {
-                    //ScrollView {
                     if isEditing {
-                        List (users) { user in
-                            Toggle ("U: \(user.fullname)", isOn: bindingFor(user: user))
-                                .disabled(self.user == user)
-
-                        }
-                    }
-                    else {
-                        List (Array(league.players)) { player in
-                            Text ("P: \(player.fullname)")
-                        }
-                    }
-                    //                    }
-                }
-
-                Section () {
-                    Button ("Invite Players") {
-                        showInvitePlayers = true
-                    }
-                    .frame (maxWidth: .infinity)
-
-                }
-                if isEditing {
 #if false
-                    Section ("New Player") {
-                        HStack {
-                            Text ("family name:")
-                                .opacity(0.8)
-                                .font (.subheadline)
-                            TextField ("required", text: $userFamilyName)
-                                .multilineTextAlignment(TextAlignment.trailing)
+                        Section ("New Player") {
+                            HStack {
+                                Text ("family name:")
+                                    .opacity(0.8)
+                                    .font (.subheadline)
+                                TextField ("required", text: $userFamilyName)
+                                    .multilineTextAlignment(TextAlignment.trailing)
 
-                        }
-                        HStack {
-                            Text ("given name:")
-                                .opacity(0.8)
-                                .font (.subheadline)
-                            TextField ("required",  text: $userGivenName)
-                                .multilineTextAlignment(TextAlignment.trailing)
+                            }
+                            HStack {
+                                Text ("given name:")
+                                    .opacity(0.8)
+                                    .font (.subheadline)
+                                TextField ("required",  text: $userGivenName)
+                                    .multilineTextAlignment(TextAlignment.trailing)
 
-                        }
-                        Button ("Create") {
-                            let player = Player.create (context, name: PersonNameComponents (givenName: userGivenName,
-                                                                                             familyName: userFamilyName))
-                            leagueUsers.insert(player)
+                            }
+                            Button ("Create") {
+                                let player = Player.create (context, name: PersonNameComponents (givenName: userGivenName,
+                                                                                                 familyName: userFamilyName))
+                                leagueUsers.insert(player)
 
-                            try? context.save()
-                            userGivenName = ""
-                            userFamilyName = ""
+                                try? context.save()
+                                userGivenName = ""
+                                userFamilyName = ""
+                            }
+                            .frame (maxWidth: .infinity)
+                            .disabled(!canCreateUser())
                         }
-                        .frame (maxWidth: .infinity)
-                        .disabled(!canCreateUser())
-                    }
 #endif
-                    Section () {
-                        Button ("Delete League", role: .destructive) {
+                        Section () {
+                            Button ("Delete League", role: .destructive) {
+                                leagueIsDeleted = true
+
+                                user.remLeague (league)
+                                context.delete (league)
+                                Task {
+                                    await controller.deleteShareFor(league: league)
+                                }
+                                try? context.save()
+                                dismiss()
+
+                                // Must also delete the 'zone' for league
+                            }
+                            .disabled (!user.hasPlayer(league.owner))
+                            .frame (maxWidth: .infinity)
                         }
-                        .frame (maxWidth: .infinity)
                     }
                 }
             }
-            .navigationTitle (league.name)
+            .navigationTitle (leagueIsDeleted ? "" :  league.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 EditButton()

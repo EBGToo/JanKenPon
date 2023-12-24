@@ -12,8 +12,8 @@
         <attribute name="moName" optional="YES" attributeType="String"/>
         <attribute name="moOwnerUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="moUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <relationship name="moGames" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Game" inverseName="moLeague" inverseEntity="Game"/>
-        <relationship name="moPlayers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="moLeague" inverseEntity="Player"/>
+        <relationship name="moGames" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Game" inverseName="moLeague" inverseEntity="Game"/>
+        <relationship name="moPlayers" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Player" inverseName="moLeague" inverseEntity="Player"/>
     </entity>
     <entity name="Player" representedClassName="Player" syncable="YES" codeGenerationType="class">
         <attribute name="moName" optional="YES" attributeType="Transformable" valueTransformerName="PersonNameComponentsValueTransformer" customClassName="NSPersonNameComponents"/>

@@ -228,6 +228,8 @@ class PersistenceController: NSObject, ObservableObject {
         // Automatically merge the changes from other contexts.
         container.viewContext.automaticallyMergesChangesFromParent = true
 
+        // Reconstruct the share map
+
         // Pin the viewContext to the current generation token and set it to keep itself up-to-date with local changes.
         //        do {
         //            try container.viewContext.setQueryGenerationFrom(.current)
@@ -268,21 +270,21 @@ class PersistenceController: NSObject, ObservableObject {
         return shareMap[league]
     }
 
-    var participantMap = [Player:CKShare.Participant]()
-    var playerMap      = [CKShare.Participant:Player]()
+    func deleteShareFor (league: League) async {
+        guard let share = shareMap[league]
+        else { return }
 
-    func associate (player: Player, participant: CKShare.Participant) {
-        participantMap[player] = participant
-        playerMap[participant] = player
-    }
+        // "CloudKit deletes the share if the owner of the shared heirarchy deletes its root record"
+        //
+        // What about the share's zone?
+        if let zones = try? await cloudKitContainer.privateCloudDatabase.allRecordZones(),
+           let zoneToDelete = zones.first (where: { zoneRecord in
+               share.recordID.zoneID == zoneRecord.zoneID
+           }) {
+            let _ = try? await cloudKitContainer.privateCloudDatabase.deleteRecordZone(withID: zoneToDelete.zoneID)
+        }
 
-    // Needs League:Share - 'participant' differs
-    func lookupParticipantFor (player: Player) -> CKShare.Participant? {
-        return participantMap[player]
-    }
-
-    func lookupPlayerFor (participant: CKShare.Participant) -> Player? {
-        return playerMap[participant]
+        shareMap.removeValue(forKey: league)
     }
 
     lazy var queue: OperationQueue = {
