@@ -116,7 +116,6 @@ struct GameView: View {
             Form {
                 let players = game.players.sorted (by: Player.byGivenNameSorter)
                 Section ("Rounds") {
-
                     Grid {
                         GridRow {
                             ForEach (players)  { player in
@@ -127,27 +126,22 @@ struct GameView: View {
                         ForEach (game.rounds, id: \.self) { round in
                             GridRow {
                                 ForEach (players) { player in
-                                    let shape = round.playerShape (player)!
-
-                                    switch shape {
-                                    case Move.Shape.none:
-                                        if player == playerForUser {
-                                            MovePicker (round: round, player: player) {
-                                                completeRound (round)
-                                                try? context.save()
+                                    if let move = round.playerMove (player) {
+                                        MoveView (move: move)
+                                            .onAppear { print ("Move (\(move.player.fullname)): \(move.shape.label)") }
+                                            .onChange (of: move.shape) { oldShape, newShape in
+                                                if move.round.isComplete {
+                                                    game.complete (round: move.round)
+                                                }
                                             }
-                                        }
-                                        else {
-                                            Text ("?")
-                                        }
-                                    case Move.Shape.done:
-                                        Text ("")
-                                    default:
-                                        Text (round.isComplete ? shape.name : ".")
+                                    }
+                                    else {
+                                        Text ("Error: No move for player: \(player.fullname)")
                                     }
                                 }
-                                .frame (height: 30)
+                                //                                    .frame (width: width, height: 30)
                             }
+                            //.frame (height: 30)
                         }
                     }
                 }
@@ -181,46 +175,6 @@ struct GameView: View {
             }
             .navigationBarTitle("Game:Foo")
             .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-}
-
-struct MovePicker: View {
-    @Environment(\.managedObjectContext) private var context
-
-    @ObservedObject var round:Round
-    @ObservedObject var player:Player
-
-    var onRoundComplete: (() -> Void)? = nil
-
-
-    let gameMoves = [Move.Shape.rock, Move.Shape.paper, Move.Shape.scissors]
-
-    func bindingForMove (round: Round, player: Player) -> Binding<Move.Shape> {
-        Binding (
-            get: {
-                round.playerShape(player)!
-            },
-            set: { value in
-                round.setPlayerShape(player, value);
-                try! context.save()
-            })
-    }
-
-    var body: some View {
-        Picker ("Move", selection:bindingForMove (round: round, player: player)) {
-            Text ("").tag (Move.Shape.none as Move.Shape)
-            ForEach (gameMoves, id: \.self) { move in
-                Text (move.name).tag (move as Move.Shape)
-            }
-        }
-        .id ("\(round.index.description):\(player.url.description)")
-        .labelsHidden()
-        .frame (maxWidth: .infinity)
-        .onChange (of: round.isComplete) { old, new in
-            if !old && new {
-                onRoundComplete? ()
-            }
         }
     }
 }

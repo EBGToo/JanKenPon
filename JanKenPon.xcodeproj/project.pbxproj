@@ -26,6 +26,7 @@
 		3C6C7A942AFDAA66009A33CC /* LeagueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A932AFDAA66009A33CC /* LeagueTests.swift */; };
 		3C6C7A962AFEFB0E009A33CC /* Round.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A952AFEFB0E009A33CC /* Round.swift */; };
 		3C6C7A982B043B29009A33CC /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A972B043B29009A33CC /* ShareView.swift */; };
+		3CBC82C22B38BA7900832ACB /* MoveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBC82C12B38BA7900832ACB /* MoveView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		3C6C7A952AFEFB0E009A33CC /* Round.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Round.swift; sourceTree = "<group>"; };
 		3C6C7A972B043B29009A33CC /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
 		3C6C7A992B083CC1009A33CC /* Notes */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
+		3CBC82C12B38BA7900832ACB /* MoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 				3C6C7A802AF09271009A33CC /* LeagueView.swift */,
 				3C6C7A822AF9BD89009A33CC /* GameView.swift */,
 				3C6C7A972B043B29009A33CC /* ShareView.swift */,
+				3CBC82C12B38BA7900832ACB /* MoveView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 				3C378C422B37E960006FFB40 /* Move.swift in Sources */,
 				3C453AB92B30E83E00331AB7 /* User.swift in Sources */,
 				3C6C7A982B043B29009A33CC /* ShareView.swift in Sources */,
+				3CBC82C22B38BA7900832ACB /* MoveView.swift in Sources */,
 				3C6C7A7B2AF07A93009A33CC /* League.swift in Sources */,
 				3C6C7A812AF09271009A33CC /* LeagueView.swift in Sources */,
 				3C6C7A6B2AF04765009A33CC /* Persistence.swift in Sources */,

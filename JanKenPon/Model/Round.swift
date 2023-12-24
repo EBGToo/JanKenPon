@@ -8,10 +8,6 @@
 import CoreData
 
 extension Round {
-
-}
-
-extension Round {
     public var index:Int {
         return Int(moIndex)
     }
