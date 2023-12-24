@@ -39,6 +39,10 @@ extension Game {
         return players.first { uuid == $0.uuid }
     }
 
+    internal func playersNotDoneIn (round: Round) -> Set<Player> {
+        return players.filter { !round.playerMove($0)!.hasShape (.done) }
+    }
+
     public var league:League {
         return moLeague! as League
     }
@@ -71,20 +75,21 @@ extension Game {
         guard round == lastRound else { return }
         guard nil   == winner    else { return }
 
-        // Prior .done players are still .done
+        // Only interested in !.done players
+        let players = playersNotDoneIn (round: round)
+
         // Compute each player's results versus every other player
         let playerResults = players
-            .filter { .done != round.playerMove($0) }
-            .reduce (into: Dictionary<Player,[Game.Move.Result]>()) { resultMap, player in
+            .reduce (into: Dictionary<Player,[Move.Result]>()) { resultMap, player in
                 let playerMove = round.playerMove(player)!
 
                 resultMap[player] = players
-                    .filter { .done != round.playerMove($0) && $0 != player }
+                    .filter { $0 != player }
                     .map    { playerMove.result (with: round.playerMove($0)!) }
             }
 
-        let playerNewMove = playerResults
-            .reduce(into: Dictionary<Player,Game.Move>()) { moveMap, entry in
+        let playerNewShape = playerResults
+            .reduce (into: Dictionary<Player,Move.Shape>()) { moveMap, entry in
                 let (player, results) = entry
 
                 let hasLoss = results.contains (.lose)
@@ -93,14 +98,14 @@ extension Game {
 
 
                 moveMap[player] = (hasLoss && !hasWin
-                                   ? Game.Move.done     // Player lost or drew every match => done
-                                   : Game.Move.none)    // Player never lost and won or drew -> none (pending)
+                                   ? Move.Shape.done     // Player lost or drew every match => done
+                                   : Move.Shape.none)    // Player never lost and won or drew -> none (pending)
             }
 
         // See if there is a winner
-        if 1 ==  playerNewMove.values.filter ({ Game.Move.none == $0 }).count {
-            winner = playerNewMove
-                .first { (player, move) in Game.Move.none == move }
+        if 1 ==  playerNewShape.values.filter ({ .none == $0 }).count {
+            winner = playerNewShape
+                .first { (player, move) in .none == move }
                 .map   { (player, move) in player }
         }
 
@@ -110,8 +115,8 @@ extension Game {
         // Another round is needed
         let newRound = Round.create (managedObjectContext!, game: self)
 
-        players.forEach { player in
-            newRound.setPlayerMove(player, playerNewMove[player] ?? Move.done)
+        self.players.forEach { player in
+            newRound.setPlayerShape (player, playerNewShape[player] ?? .done)
         }
     }
 
@@ -159,26 +164,26 @@ extension Game {
 //        return 1 == winnersIn (round: round).count
 //    }
 
-    private func playersIn (round: Round, having result: Game.Move.Result) -> Set<Player> {
+    private func playersIn (round: Round, having result: Move.Result) -> Set<Player> {
         precondition (round.isComplete)
-
+        
         // Remove .done players
-        let players = players.filter { .done != round.playerMove($0)! }
+        let players = players.filter { !round.playerMove($0)!.hasShape (.done) }
 
         return players.filter { player in
-                let playerMove = round.playerMove(player)!
-                precondition (.none != playerMove)
+            let playerMove = round.playerMove(player)!
+            precondition (!playerMove.hasShape(.none))
 
-                // Losers must not win any match; that is, must lose or draw every match
-                return players.allSatisfy { other in
-                    if other == player { return true }
+            // Losers must not win any match; that is, must lose or draw every match
+            return players.allSatisfy { other in
+                if other == player { return true }
+                
+                let otherMove = round.playerMove(other)!
+                precondition (!otherMove.hasShape(.none))
 
-                    let otherMove = round.playerMove(other)!
-                    precondition(.none != otherMove)
-
-                    return result == playerMove.result (with: otherMove)
-                }
+                return result == playerMove.result (with: otherMove)
             }
+        }
     }
 
     public func losersIn (round: Round) -> Set<Player> {
@@ -186,18 +191,18 @@ extension Game {
         precondition (round.isComplete)
 
         // Remove .done players
-        let players = players.filter { .done != round.playerMove($0)! }
+        let players = players.filter { !round.playerMove($0)!.hasShape(.done) }
 
         return players.filter { player in
             let playerMove = round.playerMove(player)!
-            precondition (.none != playerMove)
+            precondition (!playerMove.hasShape(.none))
 
             // Losers must not win any match; that is, must lose or draw every match
             return players.allSatisfy { other in
                 if other == player { return true }
 
                 let otherMove = round.playerMove(other)!
-                precondition(.none != otherMove)
+                precondition (!otherMove.hasShape(.none))
 
                 return .win != playerMove.result (with: otherMove)
             }
@@ -208,18 +213,18 @@ extension Game {
         precondition (round.isComplete)
 
         // Remove .done players
-        let players = players.filter { .done != round.playerMove($0)! }
+        let players = players.filter { !round.playerMove($0)!.hasShape(.done) }
 
         return players.filter { player in
             let playerMove = round.playerMove(player)!
-            precondition (.none != playerMove)
+            precondition (!playerMove.hasShape(.none))
 
             // Losers must not win any match; that is, must lose or draw every match
             return players.allSatisfy { other in
                 if other == player { return true }
 
                 let otherMove = round.playerMove(other)!
-                precondition(.none != otherMove)
+                precondition (!otherMove.hasShape(.none))
 
                 return .win == playerMove.result (with: otherMove)
             }
@@ -254,59 +259,6 @@ extension Game {
         return g1.date < g2.date
     }
 
-}
-extension Game {
-    public enum Move : Int, CaseIterable {
-        case none
-        case rock
-        case paper
-        case scissors
-        case done
-
-        public enum Result {
-            case none
-            case win
-            case draw
-            case lose
-        }
-
-        public func result (with move: Move) -> Result {
-            if .none == move { return .none }
-            if self  == move { return .draw }
-
-            switch self {
-            case .none:     return .none
-            case .rock:     return move == .scissors ? .win : .lose
-            case .paper:    return move == .rock     ? .win : .lose
-            case .scissors: return move == .paper    ? .win : .lose
-            case .done:     return .none
-            }
-        }
-
-        public var label:String {
-            switch self {
-            case .none:     return "N"
-            case .rock:     return "R"
-            case .paper:    return "P"
-            case .scissors: return "S"
-            case .done:     return "D"
-            }
-        }
-
-        public var name:String {
-            switch self {
-            case .none:     return "None"
-            case .rock:     return "Rock"
-            case .paper:    return "Paper"
-            case .scissors: return "Scissors"
-            case .done:     return "Done"
-            }
-        }
-
-        public static func randomized () -> Move {
-            return Move (rawValue: Int.random (in: Move.rock.rawValue...Move.scissors.rawValue))!
-        }
-    }
 }
 
 extension Game {

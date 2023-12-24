@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C378C422B37E960006FFB40 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C378C412B37E960006FFB40 /* Move.swift */; };
 		3C453AB92B30E83E00331AB7 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C453AB82B30E83E00331AB7 /* User.swift */; };
 		3C6C7A622AF0475E009A33CC /* JanKenPonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A612AF0475E009A33CC /* JanKenPonApp.swift */; };
 		3C6C7A642AF0475E009A33CC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C7A632AF0475E009A33CC /* ContentView.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3C378C412B37E960006FFB40 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 		3C453AB82B30E83E00331AB7 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		3C6C7A5E2AF0475E009A33CC /* JanKenPon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JanKenPon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C6C7A612AF0475E009A33CC /* JanKenPonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JanKenPonApp.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				3C6C7A7A2AF07A93009A33CC /* League.swift */,
 				3C6C7A952AFEFB0E009A33CC /* Round.swift */,
 				3C453AB82B30E83E00331AB7 /* User.swift */,
+				3C378C412B37E960006FFB40 /* Move.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C378C422B37E960006FFB40 /* Move.swift in Sources */,
 				3C453AB92B30E83E00331AB7 /* User.swift in Sources */,
 				3C6C7A982B043B29009A33CC /* ShareView.swift in Sources */,
 				3C6C7A7B2AF07A93009A33CC /* League.swift in Sources */,

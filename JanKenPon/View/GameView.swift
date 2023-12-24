@@ -114,7 +114,7 @@ struct GameView: View {
             //let players = Array(game.players)
 
             Form {
-                let players = game.players.sorted(by: Player.byGivenNameSorter)
+                let players = game.players.sorted (by: Player.byGivenNameSorter)
                 Section ("Rounds") {
 
                     Grid {
@@ -127,12 +127,12 @@ struct GameView: View {
                         ForEach (game.rounds, id: \.self) { round in
                             GridRow {
                                 ForEach (players) { player in
-                                    let move = round.playerMove (player)!
+                                    let shape = round.playerShape (player)!
 
-                                    switch move {
-                                    case Game.Move.none:
+                                    switch shape {
+                                    case Move.Shape.none:
                                         if player == playerForUser {
-                                            MovePicker(round: round, player: player) {
+                                            MovePicker (round: round, player: player) {
                                                 completeRound (round)
                                                 try? context.save()
                                             }
@@ -140,10 +140,10 @@ struct GameView: View {
                                         else {
                                             Text ("?")
                                         }
-                                    case Game.Move.done:
+                                    case Move.Shape.done:
                                         Text ("")
                                     default:
-                                        Text (round.isComplete ? move.name : ".")
+                                        Text (round.isComplete ? shape.name : ".")
                                     }
                                 }
                                 .frame (height: 30)
@@ -168,11 +168,11 @@ struct GameView: View {
 
                         ForEach (players) { player in
                             Button (player.name.givenName!) {
-                                game.lastRound.setPlayerMove(player, Game.Move.randomized())
+                                game.lastRound.setPlayerShape (player, Move.Shape.randomized())
                                 completeRound(game.lastRound)
                                 try! context.save()
                             }
-                            .disabled(.none != game.lastRound.playerMove(player)! || playerForUser == player)
+                            .disabled(.none != game.lastRound.playerShape(player)! || playerForUser == player)
                             .frame (maxWidth: .infinity)
                             .frame (height: 30)
                         }
@@ -194,24 +194,24 @@ struct MovePicker: View {
     var onRoundComplete: (() -> Void)? = nil
 
 
-    let gameMoves = [Game.Move.rock, Game.Move.paper, Game.Move.scissors]
+    let gameMoves = [Move.Shape.rock, Move.Shape.paper, Move.Shape.scissors]
 
-    func bindingForMove (round: Round, player: Player) -> Binding<Game.Move> {
+    func bindingForMove (round: Round, player: Player) -> Binding<Move.Shape> {
         Binding (
             get: {
-                round.playerMove(player)!
+                round.playerShape(player)!
             },
             set: { value in
-                round.setPlayerMove(player, value);
+                round.setPlayerShape(player, value);
                 try! context.save()
             })
     }
 
     var body: some View {
         Picker ("Move", selection:bindingForMove (round: round, player: player)) {
-            Text ("").tag (Game.Move.none as Game.Move)
+            Text ("").tag (Move.Shape.none as Move.Shape)
             ForEach (gameMoves, id: \.self) { move in
-                Text (move.name).tag (move as Game.Move)
+                Text (move.name).tag (move as Move.Shape)
             }
         }
         .id ("\(round.index.description):\(player.url.description)")

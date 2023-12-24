@@ -20,42 +20,49 @@ extension Round {
         return moGame! as Game
     }
 
-    public func playerMove (_ player: Player) -> Game.Move? {
-        return moPlayerToMoveMap![player.uuid].flatMap { Game.Move(rawValue: $0) }
+    public var moves: Set<Move> {
+        return moMoves! as! Set<Move>
     }
 
-    public func setPlayerMove (_ player: Player, _ move: Game.Move) {
-        precondition(game.hasPlayer(player))
-
-        moPlayerToMoveMap![player.uuid] = move.rawValue
+    public func playerShape (_ player: Player) -> Move.Shape? {
+        return playerMove (player).map(\.shape)
     }
 
-    private var playerMoves: Dictionary<Player,Game.Move> {
-        return moPlayerToMoveMap!.reduce(into: Dictionary<Player,Game.Move>()) { result, entry in
-            let (playerUUID, moveValue) = entry
-
-            if let player = game.playerBy (uuid: playerUUID),
-               let move   = Game.Move (rawValue: moveValue) {
-                result[player] = move
-            }
+    public func setPlayerShape (_ player: Player, _ shape: Move.Shape) {
+        guard let move = playerMove (player)
+        else {
+            preconditionFailure("Missed player in Round moves")
         }
+
+        move.shape = shape
     }
+
+    internal func playerMove (_ player: Player) -> Move? {
+        return moves.first { $0.hasPlayer (player) }
+    }
+
+//    private var playerMoves: Dictionary<Player,Move> {
+//        return game.players.reduce(into: [Player:Move]()) { result, player in
+//            if let move = playerMove (player) {
+//                result[player] = move
+//            }
+//        }
+//    }
 
     public var isComplete: Bool {
-        return playerMoves.values.allSatisfy { .none != $0 }
+        return moves.allSatisfy { !$0.hasShape (Move.Shape.none) }
     }
 
     public static func create (_ context: NSManagedObjectContext,
                                game: Game) -> Round {
         let round = Round (context: context)
 
-        round.moGame = game
+        round.moIndex = Int16 (game.numberOfRounds)
+
+        round.moGame  = game
         game.addToMoRounds(round)
 
-        round.moIndex = Int16 (game.numberOfRounds)
-        round.moPlayerToMoveMap = game.players.reduce (into: Dictionary<UUID, Int>()) { result, player in
-            result[player.uuid] = Game.Move.none.rawValue
-        }
+        round.moMoves = Set (game.players.map { Move.create (context, round: round, player: $0) }) as NSSet
 
         return round
     }

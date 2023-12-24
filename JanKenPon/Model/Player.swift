@@ -65,6 +65,10 @@ extension Player {
         return moGames! as! Set<Game>
     }
 
+    public var moves: Set<Move> {
+        return moMoves! as! Set<Move>
+    }
+
     internal var url: URL {
         return objectID.uriRepresentation()
     }
