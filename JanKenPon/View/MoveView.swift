@@ -10,12 +10,13 @@ import SwiftUI
 struct MoveView: View {
     @EnvironmentObject private var playerForUser: Player
     @ObservedObject var move: Move
+    @Binding var changed:Bool           // Why needed?  .onChange (of: move) { ... }
 
     var body: some View {
         let shape = move.shape
 
         if shape == .none && move.player == playerForUser {
-            MovePicker (move: move)
+            MovePicker (move: move, changed: $changed)
         }
         else {
             ShapeView (shape: shape,
@@ -26,11 +27,22 @@ struct MoveView: View {
 
 struct MovePicker: View {
     @ObservedObject var move: Move
+    @Binding var changed:Bool            // Why needed?  .onChange (of: move) { ... }
 
     let gameShapes = [Move.Shape.rock, Move.Shape.paper, Move.Shape.scissors]
 
+    func bindingForShape() -> Binding<Move.Shape> {
+        return Binding (
+            get: { return move.shape },
+            set: { newShape in
+                // Why needed?  .onChange (of: move) { ... }
+                changed = changed || newShape != move.shape
+                move.shape = newShape
+            })
+    }
+
     var body: some View {
-        Picker ("Move", selection: $move.shape) {
+        Picker ("Move", selection: bindingForShape()) {
             ShapeView (shape: Move.Shape.none).tag (Move.Shape.none as Move.Shape)
             ForEach (gameShapes, id: \.self) { shape in
                 ShapeView (shape: shape).tag (shape as Move.Shape)
@@ -40,20 +52,6 @@ struct MovePicker: View {
         .labelsHidden()
         .frame (maxWidth: .infinity)
         .frame (height: 75.0)
-        .onChange (of: move.moShape) { oldValue, newValue in
-            print ("Changed")
-        }
-        .onChange (of: move.shape) { oldValue, newValue in
-            print ("Changed")
-        }
-        .onChange (of: move) { oldValue, newValue in
-            print ("Changed")
-        }
-//        .onChange (of: move.round.isComplete) { old, new in
-//            if !old && new {
-//                onRoundComplete? ()
-//            }
-//        }
     }
 }
 

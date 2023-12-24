@@ -100,6 +100,7 @@ struct GameView: View {
     @EnvironmentObject private var playerForUser: Player
 
     @ObservedObject var game:Game
+    @State private var moveChanged = false
     @State private var roundIsComplete = false
     @State private var updates = 0
 
@@ -127,8 +128,12 @@ struct GameView: View {
                             GridRow {
                                 ForEach (players) { player in
                                     if let move = round.playerMove (player) {
-                                        MoveView (move: move)
-                                            .onAppear { print ("Move (\(move.player.fullname)): \(move.shape.label)") }
+                                        MoveView (move: move, changed: $moveChanged)
+                                            // This is required for subsequent onChange() to fire??
+                                            .onChange(of: moveChanged) { oldChange, newChange in
+                                                if !oldChange && newChange { moveChanged = false }
+                                            }
+                                            // This is ONLY called if the above `onChange` exists??
                                             .onChange (of: move.shape) { oldShape, newShape in
                                                 if move.round.isComplete {
                                                     game.complete (round: move.round)
