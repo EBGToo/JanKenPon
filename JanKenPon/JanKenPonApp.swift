@@ -109,7 +109,25 @@ struct JanKenPonApp: App {
             // If the `userRecord` does not have a `userUUIDKey` then we must create a new `User`.
             // To create a `User` we'll need the `userIdentity`
             if nil == userRecord[userUUIDKey] {
+#if false
+                let userStatus = try await userContainer.accountStatus()
 
+                guard userStatus == .available
+                else {
+                    print ("\(#function) accountStatus: \(userStatus)")
+                    return nil
+                }
+
+                // Find the partcipant for `userID`
+                let userParticipant = try await userContainer.shareParticipant (forUserRecordID: userID)
+                let userIdentity    = userParticipant.userIdentity
+
+                guard let userName = userIdentity.nameComponents
+                else {
+                    return nil
+                }
+
+#else
                 // Request `userDiscoverability`
                 let userDiscoverability = try await userContainer.requestApplicationPermission (
                     CKContainer.ApplicationPermissions.userDiscoverability)
@@ -121,15 +139,16 @@ struct JanKenPonApp: App {
                 }
 
                 // If discoverable, get the `userIdentity`
-                guard let userIdentity = try await userContainer.userIdentity (forUserRecordID: userRecord.recordID)
+                guard let userIdentity = try await userContainer.userIdentity (forUserRecordID: userRecord.recordID),
+                      let userName     = userIdentity.nameComponents
                 else {
                     return nil // return EstablishUserError.userIdentity
                 }
-
+#endif
                 // Create `newUser` with the `userRecordId`.  We'll use this to lookup the
                 // Core Data User.
                 let newUser = User.create (controller.context,
-                                           name: userIdentity.nameComponents!,
+                                           name: userName,
                                            recordID: userIdentity.userRecordID!.recordName)
 
                 // Save `newUser` to ensure CoreData has the object and, if needed, the object's
