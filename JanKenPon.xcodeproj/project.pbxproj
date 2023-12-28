@@ -65,6 +65,8 @@
 		3C6C7A972B043B29009A33CC /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
 		3C6C7A992B083CC1009A33CC /* Notes */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes; sourceTree = "<group>"; };
 		3CBC82C12B38BA7900832ACB /* MoveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveView.swift; sourceTree = "<group>"; };
+		3CCE5EB12B3E15D900B982C4 /* Invite - Sender */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Invite - Sender"; sourceTree = "<group>"; };
+		3CCE5EB22B3E15FA00B982C4 /* Accept - Sender */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Accept - Sender"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
 				3C6C7A7C2AF09028009A33CC /* View */,
 				3C6C7A672AF04765009A33CC /* Preview Content */,
 				3C6C7A992B083CC1009A33CC /* Notes */,
+				3CCE5EB42B3E160500B982C4 /* Logs */,
 			);
 			path = JanKenPon;
 			sourceTree = "<group>";
@@ -162,6 +165,15 @@
 				3C6C7A932AFDAA66009A33CC /* LeagueTests.swift */,
 			);
 			path = JanKenPonTests;
+			sourceTree = "<group>";
+		};
+		3CCE5EB42B3E160500B982C4 /* Logs */ = {
+			isa = PBXGroup;
+			children = (
+				3CCE5EB12B3E15D900B982C4 /* Invite - Sender */,
+				3CCE5EB22B3E15FA00B982C4 /* Accept - Sender */,
+			);
+			path = Logs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

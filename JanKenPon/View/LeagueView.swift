@@ -15,10 +15,10 @@ struct LeagueListView: View {
     @EnvironmentObject private var controller: PersistenceController
     @EnvironmentObject private var user: User
 
-//    @FetchRequest(
-//        sortDescriptors: [NSSortDescriptor(keyPath: \League.moName, ascending: true)],
-//        animation: .default)
-//    private var leagues: FetchedResults<League>
+    @FetchRequest(
+        sortDescriptors: [],
+        animation: .default)
+    private var leagues: FetchedResults<League>
 
     @State var showCreateLeague: Bool = false
     @State private var createdLeague: League? = nil
@@ -27,14 +27,14 @@ struct LeagueListView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(user.leagues.sorted(by: League.byDateSorter)) { league in
+                ForEach(leagues.sorted(by: League.byDateSorter)) { league in
                     NavigationLink {
                         LeagueView (league: league)
                     } label: {
                         HStack {
                             Text(league.name)
                             Spacer()
-                            Text ("(O: \(league.owner.fullname))")
+                            Text ("(\(user.leagues.contains(league) ? "Y" : "N")) (O: \(league.owner.fullname))")
                                 .font (.footnote)
                         }
                     }

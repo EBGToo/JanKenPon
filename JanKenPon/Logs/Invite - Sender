@@ -1,0 +1,178 @@
+#
+# Ed sends an invitation to Naoko
+#   Join 'League Ed 1'
+#
+
+
+======= All
+
+Error creating the CFMessagePort needed to communicate with PPT.
+CoreData: warning: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _persistUpdatedShare:]_block_invoke(3779): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Persisting share by the system UI: <NSSQLCore: 0x107e205b0> (URL: file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/shared/database.sqlite) / <CKShare: 0x10970d1d0; recordType=cloudkit.share, recordID=cloudkit.zoneshare:(com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8:__defaultOwner__), recordChangeTag=8, rootRecordID=<null>, etag=8, publicPermission=none, participantVisibility=Default, participantSelfRemovalBehavior=Default, routingKey=0cc, participants=(
+    "<CKShareParticipant: 0x280cbc900; participantID=2E81092C-50DB-4E5F-BC88-E7CEA6F3ADF7, isCurrentUser=true, role=owner, permission=readWrite, acceptanceStatus=Accepted, identity=<CKUserIdentity: 0x281ab5c80; userID=__defaultOwner__:(_defaultZone:__defaultOwner__), nameComponents=Ed, lookupInfo=<CKUserIdentityLookupInfo: 0x2830f1b30; email=ed_gamble@icloud.com>, cached=false, publicKeyVersion=2>, hasProtectionInfo=true, invitationTokenStatus=Healthy, isAnonymousInvitedParticipant=false>",
+    "<CKShareParticipant: 0x280cbc090; participantID=49380249-16CD-44D7-90A5-BD61B170DABB, isCurrentUser=false, role=user, permission=readWrite, acceptanceStatus=Pending, identity=<CKUserIdentity: 0x281ab5ce0; nameComponents=Naoko, lookupInfo=<CKUserIdentityLookupInfo: 0x2830f3780; phone=18054039863>, cached=false, publicKeyVersion=2>, hasProtectionInfo=true, invitationTokenStatus=Healthy, isAnonymousInvitedParticipant=false>"
+), currentParticipant=<CKShareParticipant: 0x280cbc900; participantID=2E81092C-50DB-4E5F-BC88-E7CEA6F3ADF7, isCurrentUser=true, role=owner, permission=readWrite, acceptanceStatus=Accepted, identity=<CKUserIdentity: 0x281ab5c80; userID=__defaultOwner__:(_defaultZone:__defaultOwner__), nameComponents=Ed, lookupInfo=<CKUserIdentityLookupInfo: 0x2830f1b30; email=ed_gamble@icloud.com>, cached=false, publicKeyVersion=2>, hasProtectionInfo=true, invitationTokenStatus=Healthy, isAnonymousInvitedParticipant=false>>
+CoreData: warning: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _persistUpdatedShare:]_block_invoke(3779): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Persisting share by the system UI: <NSSQLCore: 0x107e07f80> (URL: file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite) / <CKShare: 0x10970d1d0; recordType=cloudkit.share, recordID=cloudkit.zoneshare:(com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8:__defaultOwner__), recordChangeTag=8, rootRecordID=<null>, etag=8, publicPermission=none, participantVisibility=Default, participantSelfRemovalBehavior=Default, routingKey=0cc, participants=(
+    "<CKShareParticipant: 0x280cbc900; participantID=2E81092C-50DB-4E5F-BC88-E7CEA6F3ADF7, isCurrentUser=true, role=owner, permission=readWrite, acceptanceStatus=Accepted, identity=<CKUserIdentity: 0x281ab5c80; userID=__defaultOwner__:(_defaultZone:__defaultOwner__), nameComponents=Ed, lookupInfo=<CKUserIdentityLookupInfo: 0x2830f1b30; email=ed_gamble@icloud.com>, cached=false, publicKeyVersion=2>, hasProtectionInfo=true, invitationTokenStatus=Healthy, isAnonymousInvitedParticipant=false>",
+    "<CKShareParticipant: 0x280cbc090; participantID=49380249-16CD-44D7-90A5-BD61B170DABB, isCurrentUser=false, role=user, permission=readWrite, acceptanceStatus=Pending, identity=<CKUserIdentity: 0x281ab5ce0; nameComponents=Naoko, lookupInfo=<CKUserIdentityLookupInfo: 0x2830f3780; phone=18054039863>, cached=false, publicKeyVersion=2>, hasProtectionInfo=true, invitationTokenStatus=Healthy, isAnonymousInvitedParticipant=false>"
+), currentParticipant=<CKShareParticipant: 0x280cbc900; participantID=2E81092C-50DB-4E5F-BC88-E7CEA6F3ADF7, isCurrentUser=true, role=owner, permission=readWrite, acceptanceStatus=Accepted, identity=<CKUserIdentity: 0x281ab5c80; userID=__defaultOwner__:(_defaultZone:__defaultOwner__), nameComponents=Ed, lookupInfo=<CKUserIdentityLookupInfo: 0x2830f1b30; email=ed_gamble@icloud.com>, cached=false, publicKeyVersion=2>, hasProtectionInfo=true, invitationTokenStatus=Healthy, isAnonymousInvitedParticipant=false>>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805bc000>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805bc000>
+
+JKP:
+JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+JKP:
+JKP:
+nw_parameters_set_source_application_by_bundle_id_internal Failed to convert from bundle ID (com.agdogfights.JanKenPon) to UUID. This could lead to wrong data usage accounting.
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3100): <NSCloudKitMirroringDelegate: 0x2807a8a80> - Ignoring remote change notification because it didn't change any entities tracked by persistent history: <NSSQLCore: 0x107e07f80> (URL: file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite)
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3103): <NSCloudKitMirroringDelegate: 0x2807a87e0> - Ignoring remote change notification because it's for a different store: 1A1347E0-87C0-4A30-A4F1-89267F4C541C / 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _scheduleAutomatedExportWithLabel:activity:completionHandler:](3500): <NSCloudKitMirroringDelegate: 0x2807a8a80> - Beginning automated export - ExportActivity:
+<CKSchedulerActivity: 0x281aa2580; identifier=com.apple.coredata.cloudkit.activity.export.6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, priority=2, container=iCloud.com.agdogfights.JanKenPon:Sandbox, relatedApplications=(
+    "com.agdogfights.JanKenPon"
+), xpcActivityCriteriaOverrides={
+    ActivityGroupName = "com.apple.coredata.cloudkit.JanKenPon.6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61";
+    Delay = 0;
+    Priority = Utility;
+}>
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate executeMirroringRequest:error:](958): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Asked to execute request: <NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _enqueueRequest:]_block_invoke(992): <NSCloudKitMirroringDelegate: 0x2807a8a80>: enqueuing request: <NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _enqueueRequest:]_block_invoke_2(1001): Enqueued request: <NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExecuteNextRequest](3385): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Checking for pending requests.
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExecuteNextRequest]_block_invoke(3398): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Executing: <NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C
+
+JKP:
+JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a0000>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a0000>
+
+JKP:
+JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d6bcf0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:50:20 +0000 ended: (null) succeeded: NO }])
+JKP:
+
+JKP:
+JKP:
+JKP:
+JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
+JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
+<NSPersistentCloudKitContainerEvent: 0x281d6bcf0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:50:20 +0000 ended: (null) succeeded: NO }
+JKP:
+
+CoreData: CloudKit: CoreData+CloudKit: -[PFCloudKitExporter analyzeHistoryInStore:withManagedObjectContext:error:](531): <PFCloudKitExporter: 0x281d6bc00>: Exporting changes since (0): <NSPersistentHistoryToken - {
+    "6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61" = 2;
+}>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805b9040>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805b9040>
+CoreData: CloudKit: CoreData+CloudKit: -[PFCloudKitExporter exportIfNecessary]_block_invoke_2(345): <PFCloudKitExporter: 0x281d6bc00>: Found 0 objects needing export.
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a0410>
+
+JKP:
+JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a0410>
+JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+
+JKP:
+JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d7d0e0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:50:20 +0000 ended: 2023-12-28 20:50:20 +0000 succeeded: YES }])
+JKP:
+
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+JKP:
+JKP:
+JKP:
+JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
+JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
+<NSPersistentCloudKitContainerEvent: 0x281d7d0e0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:50:20 +0000 ended: 2023-12-28 20:50:20 +0000 succeeded: YES }
+JKP:
+
+CoreData: warning: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _exportFinishedWithResult:exporter:](1461): Finished export: <PFCloudKitExporter: 0x281d6bc00>
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _finishedRequest:withResult:](3416): Finished request: <NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C with result: <NSCloudKitMirroringResult: 0x283049cb0> storeIdentifier: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 success: 1 madeChanges: 0 error: (null)
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _scheduleAutomatedExportWithLabel:activity:completionHandler:]_block_invoke(3508): <NSCloudKitMirroringDelegate: 0x2807a8a80> - Finished automatic export - ExportActivity - with result: <NSCloudKitMirroringResult: 0x283049cb0> storeIdentifier: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 success: 1 madeChanges: 0 error: (null)
+CoreData: warning: CoreData+CloudKit: -[NSCloudKitMirroringDelegate finishedAutomatedRequestWithResult:](3429): Finished request '<NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C' with result: <NSCloudKitMirroringResult: 0x283049cb0> storeIdentifier: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 success: 1 madeChanges: 0 error: (null)
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExecuteNextRequest](3385): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Checking for pending requests.
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3100): <NSCloudKitMirroringDelegate: 0x2807a8a80> - Ignoring remote change notification because it didn't change any entities tracked by persistent history: <NSSQLCore: 0x107e07f80> (URL: file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite)
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3103): <NSCloudKitMirroringDelegate: 0x2807a87e0> - Ignoring remote change notification because it's for a different store: 1A1347E0-87C0-4A30-A4F1-89267F4C541C / 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3100): <NSCloudKitMirroringDelegate: 0x2807a8a80> - Ignoring remote change notification because it didn't change any entities tracked by persistent history: <NSSQLCore: 0x107e07f80> (URL: file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite)
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3103): <NSCloudKitMirroringDelegate: 0x2807a87e0> - Ignoring remote change notification because it's for a different store: 1A1347E0-87C0-4A30-A4F1-89267F4C541C / 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExecuteNextRequest]_block_invoke(3401): <NSCloudKitMirroringDelegate: 0x2807a8a80>: No more requests to execute.
+Got a keyboard will hide notification, but keyboard was not even present.
+connection invalidated
+Got a keyboard did hide notification, but keyboard was not even present.
+
+
+
+==== JKP Filter
+
+JKP:
+JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+JKP:
+JKP:
+JKP:
+JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+JKP:
+JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d6bcf0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:50:20 +0000 ended: (null) succeeded: NO }])
+JKP:
+JKP:
+JKP:
+JKP:
+JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
+JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
+JKP:
+JKP:
+JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+JKP:
+JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d7d0e0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:50:20 +0000 ended: 2023-12-28 20:50:20 +0000 succeeded: YES }])
+JKP:
+JKP:
+JKP:
+JKP:
+JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
+JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
+JKP:
+
+
+==== CoreData Filter
+
+CoreData: warning: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _persistUpdatedShare:]_block_invoke(3779): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Persisting share by the system UI: <NSSQLCore: 0x107e205b0> (URL: file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/shared/database.sqlite) / <CKShare: 0x10970d1d0; recordType=cloudkit.share, recordID=cloudkit.zoneshare:(com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8:__defaultOwner__), recordChangeTag=8, rootRecordID=<null>, etag=8, publicPermission=none, participantVisibility=Default, participantSelfRemovalBehavior=Default, routingKey=0cc, participants=(
+CoreData: warning: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _persistUpdatedShare:]_block_invoke(3779): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Persisting share by the system UI: <NSSQLCore: 0x107e07f80> (URL: file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite) / <CKShare: 0x10970d1d0; recordType=cloudkit.share, recordID=cloudkit.zoneshare:(com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8:__defaultOwner__), recordChangeTag=8, rootRecordID=<null>, etag=8, publicPermission=none, participantVisibility=Default, participantSelfRemovalBehavior=Default, routingKey=0cc, participants=(
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805bc000>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805bc000>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3100): <NSCloudKitMirroringDelegate: 0x2807a8a80> - Ignoring remote change notification because it didn't change any entities tracked by persistent history: <NSSQLCore: 0x107e07f80> (URL: file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite)
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3103): <NSCloudKitMirroringDelegate: 0x2807a87e0> - Ignoring remote change notification because it's for a different store: 1A1347E0-87C0-4A30-A4F1-89267F4C541C / 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _scheduleAutomatedExportWithLabel:activity:completionHandler:](3500): <NSCloudKitMirroringDelegate: 0x2807a8a80> - Beginning automated export - ExportActivity:
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate executeMirroringRequest:error:](958): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Asked to execute request: <NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _enqueueRequest:]_block_invoke(992): <NSCloudKitMirroringDelegate: 0x2807a8a80>: enqueuing request: <NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _enqueueRequest:]_block_invoke_2(1001): Enqueued request: <NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExecuteNextRequest](3385): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Checking for pending requests.
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExecuteNextRequest]_block_invoke(3398): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Executing: <NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a0000>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a0000>
+CoreData: CloudKit: CoreData+CloudKit: -[PFCloudKitExporter analyzeHistoryInStore:withManagedObjectContext:error:](531): <PFCloudKitExporter: 0x281d6bc00>: Exporting changes since (0): <NSPersistentHistoryToken - {
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805b9040>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805b9040>
+CoreData: CloudKit: CoreData+CloudKit: -[PFCloudKitExporter exportIfNecessary]_block_invoke_2(345): <PFCloudKitExporter: 0x281d6bc00>: Found 0 objects needing export.
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a0410>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a0410>
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
+CoreData: warning: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _exportFinishedWithResult:exporter:](1461): Finished export: <PFCloudKitExporter: 0x281d6bc00>
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _finishedRequest:withResult:](3416): Finished request: <NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C with result: <NSCloudKitMirroringResult: 0x283049cb0> storeIdentifier: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 success: 1 madeChanges: 0 error: (null)
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _scheduleAutomatedExportWithLabel:activity:completionHandler:]_block_invoke(3508): <NSCloudKitMirroringDelegate: 0x2807a8a80> - Finished automatic export - ExportActivity - with result: <NSCloudKitMirroringResult: 0x283049cb0> storeIdentifier: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 success: 1 madeChanges: 0 error: (null)
+CoreData: warning: CoreData+CloudKit: -[NSCloudKitMirroringDelegate finishedAutomatedRequestWithResult:](3429): Finished request '<NSCloudKitMirroringExportRequest: 0x281d8ef30> 4FE29B07-42CD-45B8-8AD1-341EB8351E2C' with result: <NSCloudKitMirroringResult: 0x283049cb0> storeIdentifier: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 success: 1 madeChanges: 0 error: (null)
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExecuteNextRequest](3385): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Checking for pending requests.
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3100): <NSCloudKitMirroringDelegate: 0x2807a8a80> - Ignoring remote change notification because it didn't change any entities tracked by persistent history: <NSSQLCore: 0x107e07f80> (URL: file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite)
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3103): <NSCloudKitMirroringDelegate: 0x2807a87e0> - Ignoring remote change notification because it's for a different store: 1A1347E0-87C0-4A30-A4F1-89267F4C541C / 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3100): <NSCloudKitMirroringDelegate: 0x2807a8a80> - Ignoring remote change notification because it didn't change any entities tracked by persistent history: <NSSQLCore: 0x107e07f80> (URL: file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite)
+CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:]_block_invoke_2(3103): <NSCloudKitMirroringDelegate: 0x2807a87e0> - Ignoring remote change notification because it's for a different store: 1A1347E0-87C0-4A30-A4F1-89267F4C541C / 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExecuteNextRequest]_block_invoke(3401): <NSCloudKitMirroringDelegate: 0x2807a8a80>: No more requests to execute.
