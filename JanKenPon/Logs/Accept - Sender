@@ -46,7 +46,12 @@ CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExe
 CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExecuteNextRequest]_block_invoke(3398): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
     Executing: <NSCloudKitMirroringImportRequest: 0x281d13b60> 29FD1EF8-1694-4347-B845-D49372424466
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite,
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -61,7 +66,16 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a4ea0>
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d78190> { type: Import store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:18 +0000 ended: (null) succeeded: NO }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d78190> {
+            type: Import
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:18 +0000
+            ended: (null)
+            succeeded: NO }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
         <NSPersistentCloudKitContainerEvent: 0x281d78190> { type: Import store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:18 +0000 ended: (null) succeeded: NO }
@@ -81,7 +95,12 @@ CoreData: CloudKit: CoreData+CloudKit: -[PFCloudKitImporter databaseFetchFinishW
 CoreData: CloudKit: CoreData+CloudKit: -[PFCloudKitImporter processWorkItemsWithCompletion:](418): <PFCloudKitImporter: 0x282bede00>:
     Processing work items: ("<PFCloudKitImporterZoneChangedWorkItem: 0x2809a48f0 - <NSCloudKitMirroringImportRequest: 0x281d13b60> 29FD1EF8-1694-4347-B845-D49372424466> {\n(\n    \"<CKRecordZoneID: 0x283076040; zoneName=com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8, ownerName=__defaultOwner__>\"\n)\n}")
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite,
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -141,7 +160,12 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[PFCloudKitImportZoneContext populateUnresolvedIDsInStore:withManagedObjectContext:error:]_block_invoke(551):
     Populating unresolved relationships: {}
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -178,7 +202,12 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805bc000>
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: warning: CoreData+CloudKit: -[PFCloudKitImportRecordsWorkItem applyAccumulatedChangesToStore:inManagedObjectContext:withStoreMonitor:madeChanges:error:](509):
@@ -196,7 +225,12 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805bc000>
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite,
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -234,7 +268,12 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805acb60>
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -242,7 +281,12 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDid
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -252,7 +296,16 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805afb50>
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d62ee0> { type: Import store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:18 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d62ee0> {
+            type: Import
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:18 +0000
+            ended: 2023-12-28 20:56:19 +0000
+            succeeded: YES }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification. <NSPersistentCloudKitContainerEvent: 0x281d62ee0> { type: Import store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:18 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }
 
@@ -298,7 +351,12 @@ CoreData: warning: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndSche
             Priority = Utility;
     }>
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -320,12 +378,26 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x28058da00>
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d63070> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: (null) succeeded: NO }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d63070> {
+            type: Export
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:19 +0000
+            ended: (null)
+            succeeded: NO }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
         <NSPersistentCloudKitContainerEvent: 0x281d63070> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: (null) succeeded: NO }
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -352,10 +424,24 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x28058dee0>
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d89450> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d89450> {
+            type: Export
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:19 +0000
+            ended: 2023-12-28 20:56:19 +0000
+            succeeded: YES }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
         <NSPersistentCloudKitContainerEvent: 0x281d89450> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }
@@ -421,7 +507,12 @@ CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExe
 CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate executeMirroringRequest:error:](958): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
     Asked to execute request: <NSCloudKitMirroringImportRequest: 0x281d78b90> 98AA5D5D-6702-4BE5-81AA-51C5E6D971C8
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
@@ -429,7 +520,16 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a4c30>
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a87e0>: Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d89cc0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: (null) succeeded: NO }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d89cc0> {
+            type: Export
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:19 +0000
+            ended: (null)
+            succeeded: NO }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
     <NSPersistentCloudKitContainerEvent: 0x281d89cc0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: (null) succeeded: NO }
@@ -444,7 +544,12 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: CloudKit: CoreData+CloudKit: -[PFCloudKitExporter exportIfNecessary]_block_invoke_2(345): <PFCloudKitExporter: 0x281d89450>:
     Found 0 objects needing export.
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite,
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -454,7 +559,16 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDid
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x28058dd40>
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d8af30> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d8af30> {
+            type: Export
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:19 +0000
+            ended: 2023-12-28 20:56:19 +0000
+            succeeded: YES }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
     <NSPersistentCloudKitContainerEvent: 0x281d8af30> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }
@@ -495,12 +609,26 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805af740>
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d89450> { type: Import store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: (null) succeeded: NO }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d89450> {
+            type: Import
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:19 +0000
+            ended: (null)
+            succeeded: NO }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
     <NSPersistentCloudKitContainerEvent: 0x281d89450> { type: Import store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: (null) succeeded: NO }
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -526,7 +654,12 @@ CoreData: CloudKit: CoreData+CloudKit: -[PFCloudKitImporter processWorkItemsWith
         "<PFCloudKitImporterZoneChangedWorkItem: 0x2809a0790 - <NSCloudKitMirroringImportRequest: 0x281d78b90> 98AA5D5D-6702-4BE5-81AA-51C5E6D971C8> {\n(\n    \"<CKRecordZoneID: 0x2830d98c0; zoneName=com.apple.coredata.cloudkit.zone, ownerName=__defaultOwner__>\"\n)\n}"
         )
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite,
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -556,7 +689,12 @@ CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate _scheduleAu
 CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate executeMirroringRequest:error:](958): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
     Asked to execute request: <NSCloudKitMirroringExportRequest: 0x281d68a50> C8C2CC36-728E-488B-AD85-F8145EE62FC1
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -586,7 +724,12 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDid
 CoreData: CloudKit: CoreData+CloudKit: -[PFCloudKitImporter processWorkItemsWithCompletion:](418): <PFCloudKitImporter: 0x282b55b00>:
     Processing work items: ()
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite,
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -598,7 +741,12 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDid
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805bc000>
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -610,7 +758,16 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d8dfe0> { type: Import store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d8dfe0> {
+            type: Import
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:19 +0000
+            ended: 2023-12-28 20:56:19 +0000
+            succeeded: YES }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
         <NSPersistentCloudKitContainerEvent: 0x281d8dfe0> { type: Import store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }
@@ -643,10 +800,24 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x28058dd40>
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d89ef0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: (null) succeeded: NO }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d89ef0> {
+            type: Export
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:19 +0000
+            ended: (null)
+            succeeded: NO }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
     <NSPersistentCloudKitContainerEvent: 0x281d89ef0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: (null) succeeded: NO }
@@ -666,7 +837,12 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: CloudKit: CoreData+CloudKit: -[PFCloudKitExporter exportIfNecessary]_block_invoke_2(345): <PFCloudKitExporter: 0x281d8ac10>:
     Found 0 objects needing export.
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite,
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -678,7 +854,16 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d632a0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d632a0> {
+            type: Export
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:19 +0000
+            ended: 2023-12-28 20:56:19 +0000
+            succeeded: YES }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
     <NSPersistentCloudKitContainerEvent: 0x281d632a0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }
@@ -727,7 +912,12 @@ CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExe
 CoreData: CloudKit: CoreData+CloudKit: -[NSCloudKitMirroringDelegate checkAndExecuteNextRequest]_block_invoke(3398): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
     Executing: <NSCloudKitMirroringExportRequest: 0x281d8e580> 9969F963-22E3-47CD-8484-C012BE22CE49
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:): Got:
+    name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
@@ -739,7 +929,16 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a4c30>
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d6b8e0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: (null) succeeded: NO }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d6b8e0> {
+            type: Export
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:19 +0000
+            ended: (null)
+            succeeded: NO }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
     <NSPersistentCloudKitContainerEvent: 0x281d6b8e0> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: (null) succeeded: NO }
@@ -760,13 +959,27 @@ CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectC
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate managedObjectContextSaved:](3007): <NSCloudKitMirroringDelegate: 0x2807a87e0>:
     Observed context save: <NSPersistentStoreCoordinator: 0x28158c2a0> - <NSManagedObjectContext: 0x2805a4c30>
 
-JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
+JKP: storeRemoteChange(_:):
+    Got: name = NSPersistentStoreRemoteChangeNotification,
+    object = Optional(<NSPersistentStoreCoordinator: 0x28158c2a0>),
+    userInfo = Optional([
+        AnyHashable("NSStoreUUID"): 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61,
+        AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite])
 JKP: storeRemoteChange(_:): Process history for 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
 
 CoreData: debug: CoreData+CloudKit: -[NSCloudKitMirroringDelegate remoteStoreDidChange:](3050): <NSCloudKitMirroringDelegate: 0x2807a8a80>:
     Observed remote store notification: <NSPersistentStoreCoordinator: 0x28158c2a0> - 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 - (null) - file:///var/mobile/Containers/Data/Application/7FC0AACA-C85D-4113-913F-43329CFFE21A/Library/Application%20Support/CoreDataStores/private/database.sqlite
 
-JKP: containerEventChanged(_:): Got: name = NSPersistentCloudKitContainerEventChangedNotification, object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>), userInfo = Optional([AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d04f00> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }])
+JKP: containerEventChanged(_:): Got:
+    name = NSPersistentCloudKitContainerEventChangedNotification,
+    object = Optional(<NSPersistentCloudKitContainer: 0x282bf5d40>),
+    userInfo = Optional([
+        AnyHashable("event"): <NSPersistentCloudKitContainerEvent: 0x281d04f00> {
+            type: Export
+            store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61
+            started: 2023-12-28 20:56:19 +0000
+            ended: 2023-12-28 20:56:19 +0000
+            succeeded: YES }])
 JKP: containerEventChanged(_:): Share (com.apple.coredata.cloudkit.share.7ACE801F-1084-4278-BE9D-58113B7E5CF8) Participants: Ed Gamble, Naoko Gamble
 JKP: containerEventChanged(_:): Received a persistent CloudKit container event changed notification.
     <NSPersistentCloudKitContainerEvent: 0x281d04f00> { type: Export store: 6823BDD0-4B6D-40BB-BBEE-1E1BE6D4EE61 started: 2023-12-28 20:56:19 +0000 ended: 2023-12-28 20:56:19 +0000 succeeded: YES }

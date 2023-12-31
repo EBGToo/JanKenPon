@@ -34,10 +34,13 @@
         <relationship name="moMoves" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Move" inverseName="moRound" inverseEntity="Move"/>
     </entity>
     <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
+        <attribute name="moEmailAddress" optional="YES" attributeType="String"/>
         <attribute name="moLeagueUUIDs" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="Array&lt;UUID&gt;"/>
         <attribute name="moName" optional="YES" attributeType="Transformable" valueTransformerName="PersonNameComponentsValueTransformer" customClassName="NSPersonNameComponents"/>
+        <attribute name="moPhoneNumber" optional="YES" attributeType="String"/>
         <attribute name="moPlayerUUIDs" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="Array&lt;UUID&gt;"/>
         <attribute name="moRecordID" optional="YES" attributeType="String"/>
+        <attribute name="moScope" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="moUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
 </model>

@@ -57,10 +57,10 @@ struct GameListView_Previews: PreviewProvider {
     struct WithState : View {
         private static var count: Int = 1
         private static let users = [
-            User.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")),
-            User.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Naoko", familyName: "Gamble")),
-            User.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Kai", familyName: "Gamble")),
-            User.create (PersistenceController.preview.context, name: PersonNameComponents(givenName: "Mitsi", familyName: "Gamble"))
+            User.create (PersistenceController.preview.context, scope: .owner, name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")),
+            User.create (PersistenceController.preview.context, scope: .owner, name: PersonNameComponents(givenName: "Naoko", familyName: "Gamble")),
+            User.create (PersistenceController.preview.context, scope: .owner, name: PersonNameComponents(givenName: "Kai", familyName: "Gamble")),
+            User.create (PersistenceController.preview.context, scope: .owner, name: PersonNameComponents(givenName: "Mitsi", familyName: "Gamble"))
         ]
 
 //        private var players: [Player]

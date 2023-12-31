@@ -8,12 +8,6 @@
 import CoreData
 
 extension User {
-    @nonobjc internal class func fetchRequest (name: PersonNameComponents) -> NSFetchRequest<User> {
-        let fetchRequest = fetchRequest()
-        fetchRequest.predicate = NSPredicate (format: "moName == %@", name as CVarArg)
-        return fetchRequest
-    }
-
     @nonobjc internal class func fetchRequest (recordID: String) -> NSFetchRequest<User> {
         let fetchRequest = fetchRequest()
         fetchRequest.predicate = NSPredicate (format: "moRecordID == %@", recordID as CVarArg)
@@ -62,6 +56,20 @@ extension User {
         let formatter = PersonNameComponentsFormatter()
         formatter.style = .default
         return formatter.string (from: name)
+    }
+
+    internal var recordIdentifier: String? {
+        return moRecordID
+    }
+
+    public var phoneNumber: String? {
+        get { return moPhoneNumber }
+        set { moPhoneNumber = newValue }
+    }
+
+    public var emailAddress: String? {
+        get { return moEmailAddress }
+        set { moEmailAddress = newValue }
     }
 
     public var players: Set<Player> {
@@ -202,14 +210,25 @@ extension User {
         }
     }
 
+    public static let nameDefault = PersonNameComponents (
+        givenName: "",
+        familyName: "Me")
+
     public static func create (_ context: NSManagedObjectContext,
+                               scope: User.Scope,
                                name: PersonNameComponents,
+                               phoneNumber: String? = nil,
+                               emailAddress: String? = nil,
                                recordID: String? = nil) -> User {
         let user = User(context: context)
 
         user.moUUID     = UUID()
         user.moRecordID = recordID
-        user.moName     = name as NSPersonNameComponents
+        user.moScope    = Int16(scope.rawValue)
+
+        user.moName         = name as NSPersonNameComponents
+        user.moPhoneNumber  = phoneNumber
+        user.moEmailAddress = emailAddress
 
         user.moLeagueUUIDs = []
         user.moPlayerUUIDs = []
@@ -217,6 +236,23 @@ extension User {
         return user
     }
 }
+
+extension User {
+    public enum Scope: Int {
+        /// The user owns this App on this device.  The `moRecordID` references the public database
+        /// User record for this App
+        case owner
+
+        /// The user has the App on another device (hasiCloudAccount).  There is no `moRecordID`
+        case user
+
+        /// The user does not have the App but is present in the system.  This makes sense for the
+        /// `AG Scoring App` where there will be players in a League/Round for which the `score`
+        /// (an Owner on their device; a User on another device) keeps a score.
+        case player
+    }
+}
+
 
 class UserBox: ObservableObject {
     @Published var user: User? = nil

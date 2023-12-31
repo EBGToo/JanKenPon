@@ -141,6 +141,11 @@ class PersistenceController: NSObject, ObservableObject {
         container.viewContext
     }
 
+    lazy var cloudKitContainer: CKContainer = {
+        return CKContainer(identifier: PersistenceController.cloudKitContainerIdentifier)
+    }()
+
+
     init (inMemory: Bool = false) {
         ValueTransformer.setValueTransformer(
             PersonNameComponentsValueTransformer(),
@@ -252,10 +257,6 @@ class PersistenceController: NSObject, ObservableObject {
                                                 object: container)
 #endif
     }
-
-    lazy var cloudKitContainer: CKContainer = {
-        return CKContainer(identifier: PersistenceController.cloudKitContainerIdentifier)
-    }()
 
     //
     //
@@ -474,7 +475,31 @@ extension PersistenceController {
 
         switch event.type {
         case .setup:  break
-        case .import: break
+        case .import:
+            // Once an import is successful, fetch the particpants and add any that are
+            // not currently users.
+            if event.succeeded {
+                do {
+                    var needContextSave = false
+                    try container.fetchShares(in: nil)
+                        .flatMap { $0.participants }
+                        .forEach { participant in
+                            let participantIdentity = participant.userIdentity
+//                            if .none == User.lookupBy (context, identity: participantIdentity),
+//                               let participantName = participantIdentity.nameComponents {
+//                                print("JKP: \(#function): Create User: \(participantName.formatted()).\nJKP:\n")
+//                                //                            let _ = User.create(context, name: participantName)
+//                                needContextSave = true
+//                            }
+                            // NO; just a stub
+                            needContextSave = (.none != participantIdentity.nameComponents)
+                        }
+                    if needContextSave { try context.save() }
+                }
+                catch {
+                    print("JKP: \(#function): Identify Users Error: \(error.localizedDescription).\nJKP:\n")
+                }
+            }
         case .export: break
         @unknown default: break
         }
@@ -484,7 +509,7 @@ extension PersistenceController {
                 print ("JKP:\nJKP: \(#function): Share (\(share.recordID.zoneID.zoneName)) Participants: \(share.participants.map { $0.userIdentity.nameComponents!.formatted() }.joined(separator: ", "))")
             }
 
-        print("JKP: \(#function): Received a persistent CloudKit container event changed notification.\n\(event)\nJKP:\n")
+        print("JKP: \(#function): Done\nJKP:\n")
     }
 
 

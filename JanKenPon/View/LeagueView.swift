@@ -372,6 +372,7 @@ struct LeagueView: View {
     LeagueListView()
         .environment(\.managedObjectContext, PersistenceController.preview.context)
         .environmentObject(User.create(PersistenceController.preview.context,
+                                       scope: User.Scope.owner,
                                        name: PersonNameComponents(givenName: "Ed", familyName: "Gamble")))
 }
 
