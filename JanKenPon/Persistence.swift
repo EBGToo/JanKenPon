@@ -27,7 +27,10 @@ class PersistenceController: NSObject, ObservableObject {
     static let bundleIdentifier = "com.agdogfights.JanKenPon"
     static let modelName = "JanKenPon"
 
-    static let storeDidChangeName = Notification.Name("jankenponStoreDidChange")
+    static let storeDidChange       = Notification.Name("jankenponStoreDidChange")
+    static let relevantTransactions = Notification.Name("relevantTransactions")
+
+    static let transactionAuthor = "What the Heck is This?"  // Another App is updating the transaction history?
 
     enum Configuration: String, CustomStringConvertible {
         case `default` = "Default"
@@ -36,8 +39,6 @@ class PersistenceController: NSObject, ObservableObject {
             return self.rawValue
         }
     }
-
-    static let transactionAuthor = "What the Heck is This?"  // Another App is updating the transaction history?
 
     /// A lazy, singleton, shared PersistentController
     public static var shared: PersistenceController = {
@@ -267,6 +268,10 @@ class PersistenceController: NSObject, ObservableObject {
         shareMap[league] = share
     }
 
+    func lookupLeagueFor (share: CKShare) -> League? {
+        return shareMap.first { $0.1 == share }.flatMap { $0.0 }
+    }
+
     func lookupShareFor (league: League) -> CKShare? {
         return shareMap[league]
     }
@@ -331,22 +336,23 @@ extension PersistenceController {
      */
     @objc
     func storeRemoteChange(_ notification: Notification) {
-        print ("\nJKP:\nJKP: \(#function): Got: \(notification.description)")
+        //print ("JKP:")
+        print ("JKP:\nJKP: \(#function): Got: \(notification.description)")
 
         guard let storeUUID = notification.userInfo?[NSStoreUUIDKey] as? String
         else { 
-            print("JKP: \(#function): Ignore a notification; no NSStoreUUIDKey.\nJKP:")
+            print("JKP: \(#function): Ignore a notification; no NSStoreUUIDKey.")
             return
         }
 
         guard storeFor (scope: .private).identifier == storeUUID ||
                 storeFor(scope: .shared).identifier == storeUUID
         else {
-            print("JKP: \(#function): Ignore a notification; irrelevant store.\nJKP:")
+            print("JKP: \(#function): Ignore a notification; irrelevant store.")
             return
         }
 
-        print("JKP: \(#function): Process history for \(storeUUID)")
+        print("JKP: \(#function): Process history for \(storeUUID).")
 
         // Processing history
         processHistoryAsynchronously (store: storeFor(uuid: storeUUID)!)
@@ -381,6 +387,60 @@ extension PersistenceController {
 
 //        processHistoryAsynchronously(storeUUID: storeUUID)
     }
+    #if false
+    func processPersistentHistory() {
+        let taskContext = persistentContainer.newBackgroundContext()
+        taskContext.performAndWait {
+
+            // Fetch history received from outside the app since the last token
+            let historyFetchRequest = NSPersistentHistoryTransaction.fetchRequest!
+            historyFetchRequest.predicate = NSPredicate(format: "author != %@", appTransactionAuthorName)
+            let request = NSPersistentHistoryChangeRequest.fetchHistory(after: lastHistoryToken)
+            request.fetchRequest = historyFetchRequest
+
+            let result = (try? taskContext.execute(request)) as? NSPersistentHistoryResult
+            guard let transactions = result?.result as? [NSPersistentHistoryTransaction],
+                  !transactions.isEmpty
+            else { return }
+
+            // Post transactions relevant to the current view.
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .didFindRelevantTransactions, object: self, userInfo: ["transactions": transactions])
+            }
+
+            // Deduplicate the new tags.
+            var newTagObjectIDs = [NSManagedObjectID]()
+            let tagEntityName = Tag.entity().name
+
+            for transaction in transactions where transaction.changes != nil {
+                for change in transaction.changes!
+                where change.changedObjectID.entity.name == tagEntityName && change.changeType == .insert {
+                    newTagObjectIDs.append(change.changedObjectID)
+                }
+            }
+            if !newTagObjectIDs.isEmpty {
+                deduplicateAndWait(tagObjectIDs: newTagObjectIDs)
+            }
+
+            // Update the history token using the last transaction.
+            lastHistoryToken = transactions.last!.token
+        }
+    }
+
+#endif
+
+//    let request = NSPersistentHistoryChangeRequest.fetchHistory (after: historyToken (with: store.identifier))
+//
+//    // Set the `fetchRequest` to get 'out' transactions
+//    let requestForTransactionHistory = NSPersistentHistoryTransaction.fetchRequest!
+//    requestForTransactionHistory.predicate = NSPredicate (value: true)
+//
+//    //historyFetchRequest.predicate = NSPredicate(format: "author != %@", TransactionAuthor.app)
+//
+//    request.fetchRequest   = requestForTransactionHistory
+//    request.affectedStores = [store]
+//    return request
+
 
     private func processHistoryAsynchronously (store: NSPersistentStore) {
         queue.addOperation {
@@ -425,8 +485,6 @@ extension PersistenceController {
                     self.updateHistoryToken(with: store.identifier, newToken: token)
                 }
 
-                print ("JKP:\nJKP:")
-
 #if false
                 var newTagObjectIDs = [NSManagedObjectID]()
                 let tagEntityName = Tag.entity().name
@@ -453,23 +511,23 @@ extension PersistenceController {
      */
     @objc
     func containerEventChanged(_ notification: Notification) {
-        print ("\nJKP:\nJKP: \(#function): Got: \(notification.description)\nJKP:\n")
+        print ("JKP:\nJKP: \(#function): Got: \(notification.description).")
 
         guard let value = notification.userInfo?[NSPersistentCloudKitContainer.eventNotificationUserInfoKey],
               let event = value as? NSPersistentCloudKitContainer.Event else {
-            print("JKP: \(#function): Failed to retrieve the container event from notification.userInfo.\nJKP:\n")
+            print("JKP: \(#function): Failed to retrieve the container event from notification.userInfo.")
             return
         }
 
         if let error = event.error
         {
-            print("JKP: \(#function): Error: \(error.localizedDescription).\nJKP:\n")
+            print("JKP: \(#function): Error: \(error.localizedDescription).")
             return
         }
 
         guard let container = notification.object as? NSPersistentCloudKitContainer
         else {
-            print("JKP: \(#function): Missed Container: \(notification.object.debugDescription).\nJKP:\n")
+            print("JKP: \(#function): Missed Container: \(notification.object.debugDescription).")
             return
         }
 
@@ -479,37 +537,144 @@ extension PersistenceController {
             // Once an import is successful, fetch the particpants and add any that are
             // not currently users.
             if event.succeeded {
-                do {
-                    var needContextSave = false
-                    try container.fetchShares(in: nil)
-                        .flatMap { $0.participants }
-                        .forEach { participant in
-                            let participantIdentity = participant.userIdentity
-//                            if .none == User.lookupBy (context, identity: participantIdentity),
-//                               let participantName = participantIdentity.nameComponents {
-//                                print("JKP: \(#function): Create User: \(participantName.formatted()).\nJKP:\n")
-//                                //                            let _ = User.create(context, name: participantName)
-//                                needContextSave = true
-//                            }
-                            // NO; just a stub
-                            needContextSave = (.none != participantIdentity.nameComponents)
+                Task {
+                    do {
+                        var needContextSave = false
+
+                        // Get all the shares
+                        let shares = try container.fetchShares (in: nil)
+
+                        // Map each share to its pre-existing league
+                        let shareToExistingLeagueMap = shares.reduce (into: [CKShare:League]()) { result, share in
+                            if let league = lookupLeagueFor(share: share) {
+                                result[share] = league
+                            }
                         }
-                    if needContextSave { try context.save() }
-                }
-                catch {
-                    print("JKP: \(#function): Identify Users Error: \(error.localizedDescription).\nJKP:\n")
+
+                        // Find shares w/o a League
+                        let unknownShares = shares.filter { nil == shareToExistingLeagueMap[$0] }
+
+                        //
+
+
+                        let shareToUnknownLeagueMap = try await cloudKitContainer.shareMetadatas(for: shares.map { $0.url! })
+                            .reduce(into: [CKShare:League]()) { result, entry in
+                                let (shareURL, shareMetadataResult) = entry
+                                
+                                switch shareMetadataResult {
+                                case .success(let metadata):
+                                    guard let share = shares.first (where: { share in shareURL == share.url })
+                                    else { preconditionFailure() }
+
+                                    if let leagueRecord = metadata.rootRecord,
+                                       let leagueUUID   = (leagueRecord["CD_moUUID"] as? String).flatMap ({ UUID(uuidString: $0) }),
+                                       let league       = League.lookupBy (self.context, uuid: leagueUUID) {
+                                        result [share] = league
+                                    }
+
+                                case .failure(let error):
+                                    break
+                                }
+                            }
+
+                        let shareToLeagueMap = shareToExistingLeagueMap
+                            .merging (shareToUnknownLeagueMap,
+                                      uniquingKeysWith: { existing, unknown in existing })
+
+                        // ****************************
+                        // DO ALL OF THIS IN 'CREATE LEAGUE' (storeRemoteChange).  THEN WE SURELY
+                        // HAVE A `LEAGUE' AND A 'SHARE' - NO MUCKING WITH CKRECORD.
+                        //
+                        // HOW DOES 'REMOTE ACCEPT' TRIGGER THAT??
+                        // ****************************
+
+                        // Get each shares metadata
+
+
+                        for share in shares {
+                            //
+                            // This share is associated w/ one-and-only-one league.  We can't use the
+                            // shareMap to find this share's league because this share might be new to
+                            // us - as in we accepted the invite.  We need to find the root record
+                            //
+                            guard let league = shareToLeagueMap[share]
+                            else {
+                                return
+                            }
+
+                            // Map the userRecordID?.record name to the participant
+                            let participantMap = share.participants
+                                .reduce (into: Dictionary<String, CKShare.Participant>()) { result, participant in
+                                    if .owner != participant.role, let recordIdentiter = participant.userIdentity.userRecordID?.recordName {
+                                        result[recordIdentiter] = participant
+                                    }
+                                }
+
+                            // Every participant must have a User.  Create new Users if needed.
+                            let users = participantMap.map { participantMapEnty in
+                                let (recordIdentifier, participant) = participantMapEnty
+
+                                // See if we already have a User with `recordIdentifer`.  If not create one
+                                if let user = User.lookupBy (context, recordID: recordIdentifier) {
+                                    return user
+                                }
+                                else {
+                                    let userIdentity = participant.userIdentity
+                                    let userInfo     = userIdentity.lookupInfo
+                                    let userRecordID = userInfo?.userRecordID?.recordName
+                                    let userName     = (userIdentity.nameComponents
+                                                        ?? PersonNameComponents (
+                                                            givenName:  "",
+                                                            familyName: userRecordID  ?? "Unknown"))
+
+                                    print ("JKP: \(#function): User: \(userName.formatted())")
+                                    needContextSave = true
+
+                                    // Create the new User
+                                    return User.create (context,
+                                                        scope: (userIdentity.hasiCloudAccount ? .user : .player),
+                                                        name:         userName,
+                                                        phoneNumber:  userInfo?.phoneNumber,
+                                                        emailAddress: userInfo?.emailAddress,
+                                                        recordID:     userRecordID)
+                                }
+                            }
+
+                            //
+                            // We need one league player for every User
+                            //
+
+                            let usersMissingAPlayer = users.filter { user in
+                                return !league.players.contains { player in
+                                    player.hasUser (user)
+                                }
+                            }
+
+                            for missedUser in usersMissingAPlayer {
+                                league.addPlayer (Player.create (context, user: missedUser))
+                            }
+
+                            // A participant might have just now accepted (and we created a User) or
+                            // have accepted for a prior share (we already had a User).
+
+                            //
+                        }
+                        if needContextSave {
+                            try context.performAndWait {
+                                try context.save()
+                            }
+                        }
+                    }
+                    catch {
+                        print("JKP: \(#function): Identify Users Error: \(error.localizedDescription).")
+                    }
                 }
             }
         case .export: break
         @unknown default: break
         }
 
-        try? container.fetchShares(in: nil)
-            .forEach { share in
-                print ("JKP:\nJKP: \(#function): Share (\(share.recordID.zoneID.zoneName)) Participants: \(share.participants.map { $0.userIdentity.nameComponents!.formatted() }.joined(separator: ", "))")
-            }
-
-        print("JKP: \(#function): Done\nJKP:\n")
+        print("JKP: \(#function): Done")
     }
 
 
@@ -572,7 +737,7 @@ extension PersistenceController {
          because when a share changes, Core Data triggers a store remote change notification with no transaction.
          */
         let userInfo: [String: Any] = [UserInfoKey.storeUUID: storeUUID, UserInfoKey.transactions: transactions]
-        NotificationCenter.default.post(name: PersistenceController.storeDidChangeName, object: self, userInfo: userInfo)
+        NotificationCenter.default.post(name: PersistenceController.storeDidChange, object: self, userInfo: userInfo)
         /**
          Update the history token using the last transaction. The last transaction has the latest token.
          */
@@ -631,7 +796,7 @@ import Combine
 
 extension NotificationCenter {
     var storeDidChangePublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
-        return publisher (for: PersistenceController.storeDidChangeName)
+        return publisher (for: PersistenceController.storeDidChange)
             .receive (on: DispatchQueue.main)
     }
 }
@@ -664,3 +829,21 @@ extension NSValueTransformerName {
             forName: PersonNameComponentsValueTransformer.name)
     }()
 }
+
+
+//@objc(SecureCLLocationTransformer)
+//class SecureCLLocationTransformer: NSSecureUnarchiveFromDataTransformer {
+//    public static let transformerName = NSValueTransformerName(rawValue: "SecureCLLocationTransformer")
+//    override class var allowedTopLevelClasses: [AnyClass] {
+//        return [CLLocation.self]
+//    }
+//}
+//
+//// MARK: Serialization of UIColor
+//@objc(ColorTransformer)
+//class ColorTransformer: NSSecureUnarchiveFromDataTransformer {
+//    public static let transformerName = NSValueTransformerName(rawValue: "ColorTransformer")
+//    override class var allowedTopLevelClasses: [AnyClass] {
+//        return [UIColor.self]
+//    }
+//}

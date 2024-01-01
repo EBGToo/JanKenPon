@@ -279,3 +279,33 @@ PanKenPon is going to share a 'league' w/ all participants.  Maybe
             }   // End of `switch server.state { ... `
         }   // End of `VStack { ...`
     }
+
+== Multi-Sync Design
+
+= Flow
+
+- Local
+    - Creates League
+    - Invites Remote(s)
+- Remote:
+    - Accepts Share
+    - League (w/ Owner, Players, Games) Appears
+        - Create 'self Player' linked to User
+            - Added to League
+        - Create/Update Users for 'other Players'
+- Local
+    - Player in League Appears
+        - Add 'User' for Player
+
+= Implication
+
+- Does not depend on shares, nor partipants
+- Updated shared state only updated by owning App
+    - Caution on playerUUID, leagueUUID,  gameUUID arrays (in User))
+        - Better to be entity w/ relationship
+        - Otherwise must merge concurrrent additions
+        - Except: User is always local!  No issue
+- All in CoreData, no CloudKit interfaces
+- Implemented 100% in `storeRemoteChange`
+
+

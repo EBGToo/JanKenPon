@@ -3,6 +3,35 @@
 #   Accept join 'League Ed 1'
 #
 
+==== Summary
+
+-- Establish User
+JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x282d916c0>), userInfo = Optional([AnyHashable("NSStoreUUID"): 43A7F0C0-79B7-4C7A-B9BD-236B0AF3ED17, AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/24C91E7D-717C-4534-9C32-310F8E12F7E3/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("historyToken"): <NSPersistentHistoryToken - {
+JKP: storeRemoteChange(_:): Process history for 43A7F0C0-79B7-4C7A-B9BD-236B0AF3ED17.
+JKP: processHistoryAsynchronously(store:): Process transactions: 1
+JKP:    Process transaction author : What the Heck is This?
+JKP:    Process transaction changes: 1
+JKP:        Process transaction changes each: <NSPersistentHistoryChange: 1 0x9400fbb440248238 <x-coredata://43A7F0C0-79B7-4C7A-B9BD-236B0AF3ED17/User/p1> Insert 1 (null) (null)>
+JKP: User: Ed Gamble
+
+-- Create League
+JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x282d916c0>), userInfo = Optional([AnyHashable("historyToken"): <NSPersistentHistoryToken - {
+JKP: storeRemoteChange(_:): Process history for 43A7F0C0-79B7-4C7A-B9BD-236B0AF3ED17.
+JKP: processHistoryAsynchronously(store:): Process transactions: 1
+JKP:    Process transaction author : What the Heck is This?
+JKP:    Process transaction changes: 3
+JKP:        Process transaction changes each: <NSPersistentHistoryChange: 2 0x9400fbb440248388 <x-coredata://43A7F0C0-79B7-4C7A-B9BD-236B0AF3ED17/Player/p1> Insert 2 (null) (null)>
+JKP:        Process transaction changes each: <NSPersistentHistoryChange: 3 0x9400fbb440248398 <x-coredata://43A7F0C0-79B7-4C7A-B9BD-236B0AF3ED17/League/p1> Insert 2 (null) (null)>
+JKP:        Process transaction changes each: <NSPersistentHistoryChange: 4 0x9400fbb440248238 <x-coredata://43A7F0C0-79B7-4C7A-B9BD-236B0AF3ED17/User/p1> Update 2 {(
+
+-- Remote Accepted
+JKP: storeRemoteChange(_:): Got: name = NSPersistentStoreRemoteChangeNotification, object = Optional(<NSPersistentStoreCoordinator: 0x282d916c0>), userInfo = Optional([AnyHashable("storeURL"): file:///var/mobile/Containers/Data/Application/24C91E7D-717C-4534-9C32-310F8E12F7E3/Library/Application%20Support/CoreDataStores/private/database.sqlite, AnyHashable("historyToken"): <NSPersistentHistoryToken - {
+JKP: storeRemoteChange(_:): Process history for 43A7F0C0-79B7-4C7A-B9BD-236B0AF3ED17.
+JKP: processHistoryAsynchronously(store:): Process transactions: 1
+JKP:    Process transaction author : What the Heck is This?
+JKP:    Process transaction changes: 1
+JKP:        Process transaction changes each: <NSPersistentHistoryChange: 5 0x9400fbb440448238 <x-coredata://43A7F0C0-79B7-4C7A-B9BD-236B0AF3ED17/User/p2> Insert 3 (null) (null)>
+
 
 ==== All
 

@@ -33,6 +33,8 @@ class JanKenPonSceneDelegate: UIResponder, UIWindowSceneDelegate {
         let store      = controller.storeFor (scope: .shared)
         let container  = controller.container
 
+        // Where is the 'share' and the 'league'?
+        
         container.acceptShareInvitations(from: [cloudKitShareMetadata], into: store) { (_, error) in
             if let error = error {
                 print("\(#function): Failed to accept share invitations: \(error)")
@@ -184,6 +186,8 @@ struct JanKenPonApp: App {
                     let dummyZone     = CKRecordZone (zoneName: UUID().uuidString)
                     let dummyShare    = CKShare (recordZoneID: dummyZone.zoneID)
 
+                    print ("JKP: User: Establish Zone: \(dummyZone.zoneID.zoneName)")
+
                     // Save the dummyZone and then the dummyShare (for/in the dummyZone)
                     let _ = try await userContainer.privateCloudDatabase.save (dummyZone)
                     let _ = try await userContainer.privateCloudDatabase.save (dummyShare)
@@ -200,11 +204,12 @@ struct JanKenPonApp: App {
                 }
 
                 // Create `newUser` with the `userRecordId`.  We'll use this to lookup the
-                // Core Data User.
+                // Core Data User when players appear in a League.
                 let newUser = User.create (controller.context,
                                            scope: User.Scope.owner,
-                                           name: (userIdentity?.nameComponents
-                                                  ?? User.nameDefault))
+                                           name: (userIdentity?.nameComponents ?? User.nameDefault),
+                                           recordID: userID.recordName)
+
 
                 // Save `newUser` to ensure CoreData has the object and, if needed, the object's
                 // objectID is a permanent one.
@@ -249,19 +254,21 @@ struct JanKenPonApp: App {
             // publicDatabase has not been synced w/ the local CoreData, such as when a new device
             // starts the app for the first time or an old device has been wiped, then `user` will
             // not exist - we'd need to wait until the import is done.
+            //
+            // "The Royal Hack"
+            var retries = 10
+            while retries > 0, .none == User.lookupBy(controller.context, uuid: userUUID) {
+                retries -= 1
+                sleep (2)
+            }
+
             guard let user = User.lookupBy(controller.context, uuid: userUUID)
             else {
-                // "If the context recognizes the specified object, the method returns that object.
-                //  Otherwise, the context fetches and returns a fully realized object from the
-                //  persistent store; unlike object(with:), this method never returns a fault. If
-                //  the object doesn’t exist in both the context and the persistent store, the
-                //  method throws an error."
-                //
-                // If thrown, our `try?` produces `nil` and we'll need to wait.
-                //
                 // Might be here is the User deletes the local App from their device and then
                 // reinstalls and restarts the App.  CloudKit has the data but it has not been
                 // reconstructed in CoreData yet.
+                //
+                // See "The Royal Hack"
                 return nil
             }
 
@@ -274,4 +281,3 @@ struct JanKenPonApp: App {
         }
     }
 }
-
