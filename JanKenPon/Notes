@@ -308,4 +308,37 @@ PanKenPon is going to share a 'league' w/ all participants.  Maybe
 - All in CoreData, no CloudKit interfaces
 - Implemented 100% in `storeRemoteChange`
 
+== Observed
+
+We see transaction author of NSCloudKitMirroringDelegate.import when the App has been deleted,
+reinstalled and then started.  Given that most all example Apps filter on a transaction author of
+ 'app', presumably the '...Delegate.import' author transaction don't need to be processed
+
+JKP: Transaction history
+JKP: Transaction History Fetch: All 1, Count 1
+JKP:    Transaction author : NSCloudKitMirroringDelegate.import
+JKP:    Transaction changes: 2
+JKP:        Transaction change : <NSPersistentHistoryChange: 5 0xb3e48d9c1bb577b3 <x-coredata://C604646F-1D05-4EF3-B35A-ABAA4A130421/League/p1> Update 2 {(
+JKP:        Transaction change league: NSPersistentHistoryChangeType(rawValue: 1)
+JKP:        Transaction change : <NSPersistentHistoryChange: 6 0xb3e48d9c1bb577b1 <x-coredata://C604646F-1D05-4EF3-B35A-ABAA4A130421/Player/p1> Update 2 {(
+JKP:        Transaction change player: NSPersistentHistoryChangeType(rawValue: 1)
+
+When we added our own League, choosing two users (Ed and Naoko)), we got this:
+
+JKP: Transaction history
+JKP: Transaction History Fetch: All 1, Count 1
+JKP:    Transaction author : What the Heck is This?
+JKP:    Transaction changes: 5
+JKP:        Transaction change : <NSPersistentHistoryChange: 7 0xb3e48d9c1bb977b3 <x-coredata://C604646F-1D05-4EF3-B35A-ABAA4A130421/League/p2> Insert 3 (null) (null)>
+JKP:        Transaction change league: NSPersistentHistoryChangeType(rawValue: 0)
+JKP:        Transaction change : <NSPersistentHistoryChange: 8 0xb3e48d9c1bb977b1 <x-coredata://C604646F-1D05-4EF3-B35A-ABAA4A130421/Player/p2> Insert 3 (null) (null)>
+JKP:        Transaction change player: NSPersistentHistoryChangeType(rawValue: 0)
+JKP:        Transaction change : <NSPersistentHistoryChange: 9 0xb3e48d9c1bbd77b1 <x-coredata://C604646F-1D05-4EF3-B35A-ABAA4A130421/Player/p3> Insert 3 (null) (null)>
+JKP:        Transaction change player: NSPersistentHistoryChangeType(rawValue: 0)
+JKP:        Transaction change : <NSPersistentHistoryChange: 10 0xb3e48d9c1bb9778f <x-coredata://C604646F-1D05-4EF3-B35A-ABAA4A130421/User/p2> Update 3 {(
+JKP:        Transaction change user  : NSPersistentHistoryChangeType(rawValue: 1)
+JKP:        Transaction change : <NSPersistentHistoryChange: 11 0xb3e48d9c1bb5778f <x-coredata://C604646F-1D05-4EF3-B35A-ABAA4A130421/User/p1> Update 3 {(
+JKP:        Transaction change user  : NSPersistentHistoryChangeType(rawValue: 1)
+
+What would happen if we processed each of the changes for League, Player and User?  Double changes?  Race condition?
 

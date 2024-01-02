@@ -252,10 +252,10 @@ class PersistenceController: NSObject, ObservableObject {
                                                 name: .NSPersistentStoreRemoteChange,
                                                 object: container.persistentStoreCoordinator)
 
-        NotificationCenter.default.addObserver (self,
-                                                selector: #selector(containerEventChanged(_:)),
-                                                name: NSPersistentCloudKitContainer.eventChangedNotification,
-                                                object: container)
+//        NotificationCenter.default.addObserver (self,
+//                                                selector: #selector(containerEventChanged(_:)),
+//                                                name: NSPersistentCloudKitContainer.eventChangedNotification,
+//                                                object: container)
 #endif
     }
 
@@ -337,172 +337,216 @@ extension PersistenceController {
     @objc
     func storeRemoteChange(_ notification: Notification) {
         //print ("JKP:")
-        print ("JKP:\nJKP: \(#function): Got: \(notification.description)")
+        //print ("JKP:\nJKP: \(#function): Got: \(notification.description)")
 
         guard let storeUUID = notification.userInfo?[NSStoreUUIDKey] as? String
         else { 
-            print("JKP: \(#function): Ignore a notification; no NSStoreUUIDKey.")
+            //print("JKP: \(#function): Ignore a notification; no NSStoreUUIDKey.")
             return
         }
 
         guard storeFor (scope: .private).identifier == storeUUID ||
                 storeFor(scope: .shared).identifier == storeUUID
         else {
-            print("JKP: \(#function): Ignore a notification; irrelevant store.")
+            //print("JKP: \(#function): Ignore a notification; irrelevant store.")
             return
         }
 
-        print("JKP: \(#function): Process history for \(storeUUID).")
+        //print("JKP: \(#function): Process history for \(storeUUID).")
 
         // Processing history
-        processHistoryAsynchronously (store: storeFor(uuid: storeUUID)!)
-
-#if false
         queue.addOperation {
             let context = self.container.newTaskContext()
             context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
             context.performAndWait {
-
-                // self.performHistoryProcessing(storeUUID: storeUUID, performingContext: context)
-                let request = self.requestForHistory (storeUUID: storeUUID)
-
-                // Execute the request
-                let result = (try? context.execute(request)) as? NSPersistentHistoryResult
-                guard let transactions = result?.result as? [NSPersistentHistoryTransaction] else {
-                    return
-                }
-                print("JKP: \(#function): Process transactions: \(transactions.count)\nJKP:")
-
-                // Handle transaction by transaction
-                for transaction in transactions {
-                    print("JKP: \(#function): Process transaction changes: \(transaction.changes.map(\.count) ?? 0)\nJKP:")
-                    for change in transaction.changes ?? [] {
-                        print("JKP: \(#function): Process transaction changes each:: \(change)\nJKP:")
-
-                    }
-                }
+                self.processHistory (context: context, store: self.storeFor (uuid: storeUUID)!)
             }
-        }
-#endif
-
-//        processHistoryAsynchronously(storeUUID: storeUUID)
-    }
-    #if false
-    func processPersistentHistory() {
-        let taskContext = persistentContainer.newBackgroundContext()
-        taskContext.performAndWait {
-
-            // Fetch history received from outside the app since the last token
-            let historyFetchRequest = NSPersistentHistoryTransaction.fetchRequest!
-            historyFetchRequest.predicate = NSPredicate(format: "author != %@", appTransactionAuthorName)
-            let request = NSPersistentHistoryChangeRequest.fetchHistory(after: lastHistoryToken)
-            request.fetchRequest = historyFetchRequest
-
-            let result = (try? taskContext.execute(request)) as? NSPersistentHistoryResult
-            guard let transactions = result?.result as? [NSPersistentHistoryTransaction],
-                  !transactions.isEmpty
-            else { return }
-
-            // Post transactions relevant to the current view.
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: .didFindRelevantTransactions, object: self, userInfo: ["transactions": transactions])
-            }
-
-            // Deduplicate the new tags.
-            var newTagObjectIDs = [NSManagedObjectID]()
-            let tagEntityName = Tag.entity().name
-
-            for transaction in transactions where transaction.changes != nil {
-                for change in transaction.changes!
-                where change.changedObjectID.entity.name == tagEntityName && change.changeType == .insert {
-                    newTagObjectIDs.append(change.changedObjectID)
-                }
-            }
-            if !newTagObjectIDs.isEmpty {
-                deduplicateAndWait(tagObjectIDs: newTagObjectIDs)
-            }
-
-            // Update the history token using the last transaction.
-            lastHistoryToken = transactions.last!.token
         }
     }
 
-#endif
+    private func processHistory (context: NSManagedObjectContext, store: NSPersistentStore) {
 
-//    let request = NSPersistentHistoryChangeRequest.fetchHistory (after: historyToken (with: store.identifier))
-//
-//    // Set the `fetchRequest` to get 'out' transactions
-//    let requestForTransactionHistory = NSPersistentHistoryTransaction.fetchRequest!
-//    requestForTransactionHistory.predicate = NSPredicate (value: true)
-//
-//    //historyFetchRequest.predicate = NSPredicate(format: "author != %@", TransactionAuthor.app)
-//
-//    request.fetchRequest   = requestForTransactionHistory
-//    request.affectedStores = [store]
-//    return request
+        //print("JKP: Transaction history")
 
+        // self.performHistoryProcessing(storeUUID: storeUUID, performingContext: context)
+        let request = self.requestForHistoryTransactions (store: store)
 
-    private func processHistoryAsynchronously (store: NSPersistentStore) {
-        queue.addOperation {
-            let context = self.container.newTaskContext()
-            context.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-            context.performAndWait {
+        let transactions = self.fetchHistoryTransactions (context,
+                                                          request: request,
+                                                          keepIfTrue: { $0.changes != nil })
 
-                // self.performHistoryProcessing(storeUUID: storeUUID, performingContext: context)
-                let request = self.requestForHistory (store: store)
+        Task {
+            //                    NotificationCenter.default.post (name: .didFindRelevantTransactions,
+            //                                                     object: self,
+            //                                                     userInfo: ["transactions": transactions])
+        }
 
-                // Execute the request
-                let result = (try? context.execute(request)) as? NSPersistentHistoryResult
-                guard let transactions = result?.result as? [NSPersistentHistoryTransaction] else {
-                    return
+        //
+        // Find leagueObjectIDs that have been updated with changes to moPlayers.  We'll need to
+        // ensure proper User <==> Player links.  User's are ALWAYS in the privateDatabase while
+        // Player's are ALWAYS in sharedDatabases - part of a League's share.
+        //
+        let leagueObjectIDs = transactions
+            .flatMap { $0.changes ?? [] }
+            .filter  { $0.changeType  == .update  }
+            .filter  {
+                guard let updatedProperties = $0.updatedProperties
+                else { return false }
+
+                return updatedProperties.contains {
+                    $0.entity.name == League.entity().name &&       // league changed
+                    $0.name        == "moPlayers"                   // league players updated
                 }
+            }
+            .map { $0.changedObjectID }
+//            .uniquify
 
-                if !transactions.isEmpty {
-                    print("JKP: \(#function): Process transactions: \(transactions.count)")
-                }
+        if !leagueObjectIDs.isEmpty {
+            let leagueContext = container.newTaskContext()
 
-                // Handle transaction by transaction
-                for transaction in transactions where transaction.changes != nil {
-                    print("JKP:    Process transaction author : \(transaction.author ?? "<none>")")
-                    print("JKP:    Process transaction changes: \(transaction.changes.map(\.count) ?? 0)")
-                    for change in transaction.changes! {
-                        print("JKP:        Process transaction changes each: \(change)")
-                        switch change.changeType {
-                        case .insert:
-                            break
-                        case .update:
-                            break
-                        case .delete:
-                            break
-                        @unknown default:
-                            preconditionFailure("Missed `changeType` case")
+            leagueContext.performAndWait {
+                // All User's; we'll filter for those missing players
+                let allUsersAsOwner = User.all (leagueContext).filter { $0.scope == .owner }
+
+                // My User will be the only one with .owner
+                precondition (1 == allUsersAsOwner.count)
+                let myUser   = allUsersAsOwner.first!
+
+
+                // The leages that have player changes
+                let leagues = leagueObjectIDs
+                    .map { leagueContext.object(with: $0) as! League }
+
+                for league in leagues {
+                    // Every league must have my User as a Player.  A league only appears in
+                    // my `context` if I have accepted the `share` and am thus in the league.
+                    if !league.players.contains (where: { myUser.hasPlayer($0) }) {
+                        let player = Player.create (leagueContext, user: myUser)
+
+                        myUser.addPlayer (player)
+                        league.addPlayer (player)
+                    }
+
+                    // Look at every player in league; we'll resolve User <==> Player references.
+                    for player in league.players {
+
+                        if let user = player.user (in: context) {
+                            // If the player references an existing user, that user needs to
+                            // point back at the player.  Such a link won't exist in a case where
+                            // a remote app accepts a SECOND share - the first share acceptance
+                            // created the User (see below); the second one will see the user but
+                            // won't have a link yet
+                            user.addPlayer (player)
                         }
-                        // Find the objects that have changed
+                        else {
+                        // If a remote App has accepted a `share`, they will add their player to
+                        // this league (see above abvoe).  We won't have a User for that player;
+                        // we'll have to create a User, in our privateDatabase
+                            let _ = User.create (leagueContext,
+                                                 scope: User.Scope.user,
+                                                 player: player)
+                        }
                     }
                 }
 
-                if let token = transactions.last?.token {
-                    self.updateHistoryToken(with: store.identifier, newToken: token)
-                }
-
-#if false
-                var newTagObjectIDs = [NSManagedObjectID]()
-                let tagEntityName = Tag.entity().name
-
-                for transaction in transactions where transaction.changes != nil {
-                    for change in transaction.changes! {
-                        // Somebody create a new 'tag'
-                        if change.changedObjectID.entity.name == tagEntityName && change.changeType == .insert {
-                            newTagObjectIDs.append(change.changedObjectID)
-                        }
-                    }
-                }
-                if !newTagObjectIDs.isEmpty {
-                    deduplicateAndWait(tagObjectIDs: newTagObjectIDs)
-                }
-#endif
+                // On 'insert' league players are []; on 'update' players exist
+                try? leagueContext.save()
             }
         }
+
+
+
+        // Handle each of transactions independently.  A Massive Assumption - Deduplicate
+        transactions.forEach { self.processHistoryTransaction (context, $0) }
+
+        // Update our history token
+        if let token = transactions.last?.token {
+            self.updateHistoryToken(with: store.identifier, newToken: token)
+        }
+    }
+
+    private func processHistoryTransaction (_ context: NSManagedObjectContext, 
+                                            _ transaction: NSPersistentHistoryTransaction ) {
+        print("JKP:    Transaction author : \(transaction.author ?? "<none>")")
+        print("JKP:    Transaction changes: \(transaction.changes.map(\.count) ?? 0)")
+        transaction.changes?.forEach { self.processHistoryTransactionChange (context, $0) }
+    }
+
+    private func processHistoryTransactionChange (_ context: NSManagedObjectContext, 
+                                                  _ change: NSPersistentHistoryChange) {
+        print("JKP:        Transaction change : \(change)")
+
+        // Process changes based on the entity type
+        switch change.changedObjectID.entity.name {
+        case Game.entity().name:
+            break
+
+        case League.entity().name:
+            guard let league = context.object (with: change.changedObjectID) as? League
+            else { preconditionFailure() }
+
+            processHistoryTransactionChangeLeague (context, change, league)
+
+        case Move.entity().name:
+            break
+
+        case Player.entity().name:
+            guard let player = context.object (with: change.changedObjectID) as? Player
+            else { preconditionFailure() }
+
+            processHistoryTransactionChangePlayer (context, change, player)
+
+        case Round.entity().name:
+            break
+
+        case User.entity().name:
+            guard let user = context.object (with: change.changedObjectID) as? User
+            else { preconditionFailure() }
+
+            processHistoryTransactionChangeUser (context, change, user)
+
+        default:
+            preconditionFailure ("Unknown entity-type in transaction change")
+        }
+    }
+
+    private func processHistoryTransactionChangeLeague (_ context: NSManagedObjectContext, 
+                                                        _ change: NSPersistentHistoryChange,
+                                                        _ league: League) {
+        print("JKP:        Transaction change league: \(change.changeType)")
+        switch change.changeType {
+        case .insert:
+            break
+        case .update:
+            break
+        default:
+            break
+        }
+        //        for change in transaction.changes! {
+        //            switch change.changeType {
+        //            case .insert:
+        //                break
+        //            case .update:
+        //                break
+        //            case .delete:
+        //                break
+        //            @unknown default:
+        //                preconditionFailure("Missed `changeType` case")
+        //            }
+        //            // Find the objects that have changed
+        //        }
+    }
+
+    private func processHistoryTransactionChangePlayer(_ context: NSManagedObjectContext, 
+                                                       _ change: NSPersistentHistoryChange,
+                                                       _ player: Player) {
+        print("JKP:        Transaction change player: \(change.changeType)")
+    }
+
+    private func processHistoryTransactionChangeUser (_ context: NSManagedObjectContext,
+                                                      _ change: NSPersistentHistoryChange, 
+                                                      _ user: User) {
+        print("JKP:        Transaction change user  : \(change.changeType)")
     }
 
 
@@ -678,19 +722,43 @@ extension PersistenceController {
     }
 
 
-    func requestForHistory (store: NSPersistentStore) -> NSPersistentHistoryChangeRequest {
+    func requestForHistoryTransactions (store: NSPersistentStore) -> NSPersistentHistoryChangeRequest {
         let request = NSPersistentHistoryChangeRequest.fetchHistory (after: historyToken (with: store.identifier))
 
         // Set the `fetchRequest` to get 'out' transactions
         let requestForTransactionHistory = NSPersistentHistoryTransaction.fetchRequest!
-        requestForTransactionHistory.predicate = NSPredicate (value: true)
-
-        //historyFetchRequest.predicate = NSPredicate(format: "author != %@", TransactionAuthor.app)
+        //requestForTransactionHistory.predicate = NSPredicate (value: true)
+        requestForTransactionHistory.predicate = NSPredicate (format: "author != %@", PersistenceController.transactionAuthor)
 
         request.fetchRequest   = requestForTransactionHistory
         request.affectedStores = [store]
+
         return request
     }
+
+    private func fetchHistoryTransactions (_ context: NSManagedObjectContext,
+                                           request: NSPersistentHistoryChangeRequest,
+                                           keepIfTrue: ((NSPersistentHistoryTransaction) -> Bool)? = nil) -> [NSPersistentHistoryTransaction] {
+        // Execute the request
+        let historyResult = (try? context.execute(request)) as? NSPersistentHistoryResult
+
+        // Expect HistoryTransactions
+        guard let unfilteredTransactions = historyResult?.result as? [NSPersistentHistoryTransaction]
+        else {
+            return []
+        }
+
+        let transactions = unfilteredTransactions
+            .filter { keepIfTrue?($0) ?? true }
+
+        if !unfilteredTransactions.isEmpty {
+            print("JKP: Transaction History Fetch: All \(unfilteredTransactions.count), Count \(transactions.count)")
+        }
+
+        return transactions
+    }
+
+
     /**
      An operation queue for handling history-processing tasks: watching changes, deduplicating tags, and triggering UI updates, if needed.
      */

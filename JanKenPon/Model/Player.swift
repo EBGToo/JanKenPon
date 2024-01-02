@@ -49,12 +49,20 @@ extension Player {
     ///
     /// Returns this `player's` user; or nil if the user has been deleted.
     ///
+    internal func user (in context: NSManagedObjectContext) -> User? {
+        return User.lookupBy (context, uuid: moUserUUID!)
+    }
+
     public var user: User? {
-        return User.lookupBy (managedObjectContext!, uuid: moUserUUID!)
+        return user (in: managedObjectContext!)
     }
 
     public func hasUser (_ user: User) -> Bool {
         return moUserUUID! == user.uuid
+    }
+
+    internal var userUUID: UUID {
+        return moUserUUID!
     }
 
     public var league:League {
