@@ -69,15 +69,10 @@ struct LeagueListView: View {
     private func doTheShareThing (league: League, done: @escaping () -> Void) {
         Task {
             do {
-                let (_, share, _) = try await controller.container.share([league], to: nil)
+                let (_, share, _) = try await controller.container.share ([league], to: nil)
 
                 // Configure the share
                 share[CKShare.SystemFieldKey.title] = league.name
-
-                // Record the association
-                controller.associate(league: league, share: share)
-
-                // Extract `userIdentity` from share owner+participants
             }
             catch {
                 print ("JKP: Error: \(error.localizedDescription)")
@@ -252,10 +247,8 @@ struct LeagueView: View {
 
                                 user.remLeague (league)
                                 context.delete (league)
-                                Task {
-                                    await controller.deleteShareFor(league: league)
-                                }
                                 try? context.save()
+
                                 dismiss()
 
                                 // Must also delete the 'zone' for league
@@ -328,7 +321,7 @@ struct LeagueView: View {
                 }
             }
         }
-        .onReceive(NotificationCenter.default.storeDidChangePublisher) { notification in
+        .onReceive (NotificationCenter.default.storeDidChangePublisher) { notification in
             processStoreChangeNotification(notification)
         }
 

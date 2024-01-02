@@ -20,12 +20,6 @@ extension User {
         return fetchRequest
     }
 
-//    @nonobjc internal class func fetchRequest (scope: Scope) -> NSFetchRequest<User> {
-//        let fetchRequest = fetchRequest()
-//        fetchRequest.predicate = NSPredicate (format: "moScope == %@", scope.rawValue as CVarArg)
-//        return fetchRequest
-//    }
-
     public static func lookupBy (_ context: NSManagedObjectContext, uuid: UUID) -> User? {
         guard let users = try? context.fetch (User.fetchRequest (uuid: uuid)), users.count > 0
         else { return nil }
@@ -39,13 +33,6 @@ extension User {
 
         return users[0]
     }
-
-//    public static func lookupBy (_ context: NSManagedObjectContext, scope: Scope) -> [User] {
-//        guard let users = try? context.fetch (User.fetchRequest (scope: scope)), users.count > 0
-//        else { return [] }
-//
-//        return users
-//    }
 
     public static func all (_ context:NSManagedObjectContext) -> Set<User> {
         return Set ((try? context.fetch (User.fetchRequest())) ?? [])
