@@ -36,7 +36,8 @@ class PersistenceController: NSObject, ObservableObject {
 
     struct CloudKit {
         static let containerName       = App.name
-        static let containerIdentifier = "iCloud.\(App.bundleIdentifier)"
+        static let containerVersion    = "r0001"
+        static let containerIdentifier = "iCloud.\(App.bundleIdentifier).\(containerVersion)"
     }
 
     enum Configuration: String, CustomStringConvertible {
