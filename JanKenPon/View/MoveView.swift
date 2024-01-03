@@ -63,14 +63,18 @@ struct ShapeView: View {
         if completed {
             switch shape {
             case .none:     return Image (systemName: "questionmark")
-            case .done:     return Image (systemName: "checkmark")
+            case .done:     return Image (systemName: "xmark")
             case .rock:     return Image ("shape.rock")
             case .paper:    return Image ("shape.paper")
             case .scissors: return Image ("shape.scissors")
             }
         }
         else {
-            return Image (systemName: "dot.circle")
+            switch shape {
+            case .none:     return Image (systemName: "questionmark")
+            case .done:     return Image (systemName: "xmark")
+            default:        return Image (systemName: "checkmark")
+            }
         }
     }
 }

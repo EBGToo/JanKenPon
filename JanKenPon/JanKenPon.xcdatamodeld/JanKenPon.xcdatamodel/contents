@@ -2,6 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23B92" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Game" representedClassName="Game" syncable="YES" codeGenerationType="class">
         <attribute name="moDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="moOwnerUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="moWinnerUUID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="moLeague" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="League" inverseName="moGames" inverseEntity="League"/>
         <relationship name="moPlayers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Player" inverseName="moGames" inverseEntity="Player"/>

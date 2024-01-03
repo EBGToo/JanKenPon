@@ -19,9 +19,8 @@ import CoreData
 // There would need to be other players added (in the AG Scoring App case).  Create them and then
 // share the league with them... their player name, etc gets updated.
 
-class JanKenPonSceneDelegate: UIResponder, UIWindowSceneDelegate {
-    var window: UIWindow?
 
+class JanKenPonSceneDelegate: UIResponder, UIWindowSceneDelegate {
     //
     // Accept the share - requires adding 'CKSharingSupported: YES' to Info.plist
     //
@@ -49,23 +48,29 @@ class JanKenPonAppDelegate: UIResponder, UIApplicationDelegate, ObservableObject
         return true
     }
 
-    func application (_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession,
+    func application(_ application: UIApplication, configurationForConnecting
+                     connectingSceneSession: UISceneSession,
                      options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        let configuration = UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-        configuration.delegateClass = JanKenPonSceneDelegate.self
-        return configuration
+
+        // Create a scene configuration object for the specified session role.
+        let config = UISceneConfiguration (name: nil, // "Default Configuration"
+                                           sessionRole: connectingSceneSession.role)
+
+        // Set the configuration's delegate class to the scene delegate that implements the
+        // share acceptance method.
+        config.delegateClass = JanKenPonSceneDelegate.self
+
+        return config
     }
 }
 
 
 @main
 struct JanKenPonApp: App {
-    // Use the custom AppDelegate class
-    // as the app's application delegate.
+    // Use the custom AppDelegate class as the app's application delegate.
     @UIApplicationDelegateAdaptor var appDelegate: JanKenPonAppDelegate
 
     @StateObject private var userBox = UserBox()
-
     @State private var needEstablishUserAlert = false
 
     var body: some Scene {
@@ -102,7 +107,10 @@ struct JanKenPonApp: App {
                     print ("JKP: User: \(userBox.user.map (\.fullname) ?? "MISSED")")
                     needEstablishUserAlert = (.none == userBox.user)
                 }
-                .alert("Unable to establish the App user",
+                .alert("""
+                            Unable to establish the App user.  Please quit the App, ensure network \
+                            connectivity and then retry.
+                            """,
                        isPresented: $needEstablishUserAlert) {
                     Button ("Quit") { exit(EXIT_SUCCESS) }
                 }
@@ -250,12 +258,14 @@ struct JanKenPonApp: App {
                 return nil
             }
 
+            //
             // Lookup the existing user with the permanent `userManagedObjectID`.  If the
             // publicDatabase has not been synced w/ the local CoreData, such as when a new device
             // starts the app for the first time or an old device has been wiped, then `user` will
             // not exist - we'd need to wait until the import is done.
             //
             // "The Royal Hack"
+            //
             var retries = 10
             while retries > 0, .none == User.lookupBy(controller.context, uuid: userUUID) {
                 retries -= 1

@@ -70,6 +70,10 @@ extension League {
         return players.contains(player)
     }
 
+    public var  users:Set<User> {
+        Set(players.compactMap { $0.user })
+    }
+
     public var games:Set<Game> {
         return moGames! as! Set<Game>
     }

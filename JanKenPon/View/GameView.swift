@@ -24,7 +24,7 @@ struct GameListView: View {
                     NavigationLink {
                         GameView (game: game)
                     } label: {
-                        Text("\(league.name): Foo")
+                        Text(LeagueView.dateFormatter.string(from: game.date))
                     }
                 }
                 //                .onDelete(perform: deleteItems)
@@ -104,8 +104,8 @@ struct GameView: View {
     @State private var roundIsComplete = false
     @State private var updates = 0
 
-    private func completeRound (_ round: Round) {
-        game.complete(round: round)
+    private func completeRound (_ round: Round, player: Player? = nil ) {
+        game.complete (round: round, player: player ?? playerForUser)
         if round.isComplete { updates = 0 }
         else { updates += 1 }
     }
@@ -136,8 +136,10 @@ struct GameView: View {
                                             // This is ONLY called if the above `onChange` exists??
                                             .onChange (of: move.shape) { oldShape, newShape in
                                                 if move.round.isComplete {
-                                                    game.complete (round: move.round)
+                                                    completeRound (move.round)
+//                                                    game.complete (round: move.round, player: playerForUser)
                                                 }
+                                                try? context.save()
                                             }
                                     }
                                     else {
@@ -155,6 +157,10 @@ struct GameView: View {
                     Text (game.winner.map { $0.fullname} ?? "")
                 }
 
+                Section ("Owner") {
+                    Text (game.players.first?.fullname ?? "")
+                }
+
                 Section ("Players") {
                     ForEach (players) { player in
                         Text (player.fullname)
@@ -168,7 +174,7 @@ struct GameView: View {
                         ForEach (players) { player in
                             Button (player.name.givenName!) {
                                 game.lastRound.setPlayerShape (player, Move.Shape.randomized())
-                                completeRound(game.lastRound)
+                                completeRound (game.lastRound, player: player)
                                 try! context.save()
                             }
                             .disabled(.none != game.lastRound.playerShape(player)! || playerForUser == player)
@@ -178,7 +184,7 @@ struct GameView: View {
                     }
                 }
             }
-            .navigationBarTitle("Game:Foo")
+            .navigationBarTitle(LeagueView.dateFormatter.string(from: game.date))
             .navigationBarTitleDisplayMode(.inline)
         }
     }

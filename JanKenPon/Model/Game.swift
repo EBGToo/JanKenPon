@@ -52,6 +52,10 @@ extension Game {
         set (winner) { moWinnerUUID = winner.map { $0.uuid } }
     }
 
+    internal var ownerUUID: UUID {
+        return moOwnerUUID!
+    }
+
     public var rounds: Array<Round> {
         return (moRounds! as! Set<Round>).sorted { $0.index < $1.index }
     }
@@ -70,7 +74,9 @@ extension Game {
         return round (at: numberOfRounds - 1)
     }
 
-    public func complete (round: Round) {
+    public func complete (round: Round, player: Player) {
+        guard ownerUUID == player.uuid else { return }
+        guard players.first.map ({ $0 == player}) ?? false else { return }
         guard round.isComplete   else { return }
         guard round == lastRound else { return }
         guard nil   == winner    else { return }
@@ -236,12 +242,16 @@ extension Game {
                                league: League,
                                date: Date,
                                players: Set<Player>) -> Game {
+        precondition (!players.isEmpty)
+
         let game = Game (context: context)
 
         game.moLeague = league
         league.addToMoGames (game)
 
         game.moDate   = date
+        game.moWinnerUUID = nil
+        game.moOwnerUUID  = players.first!.uuid
         game.moRounds = NSSet()
 
         game.addToMoPlayers (players as NSSet)
@@ -255,8 +265,11 @@ extension Game {
 }
 
 extension Game {
-    public static let byDataSorter = { (g1:Game, g2:Game) -> Bool in
+    public static let byDateSorter = { (g1:Game, g2:Game) -> Bool in
         return g1.date < g2.date
+    }
+    public static let byDateSorterRev = { (g1:Game, g2:Game) -> Bool in
+        return g1.date > g2.date
     }
 
 }
